@@ -1,0 +1,49 @@
+<div class="change-product">
+  <div class="col-xs-10">
+    <div class="bg-primary p-a-1" [class.bg-warning]="editing">
+      <h5>{{editing ? "Edit" : "Create"}} Product</h5>
+    </div>
+    <form novalidate #form="ngForm" (ngSubmit)="submitForm(form)" (reset)="resetForm()">
+      <div class="form-group">
+        <label>Id</label>
+        <input class="form-control" name="Id" placeholder="1211" [(ngModel)]="product.id"/>
+      </div>
+      <div class="form-group">
+        <label>Category</label>
+        <input class="form-control" name="typeOfClothes" placeholder="Dress" [(ngModel)]="product.typeOfClothes"/>
+      </div>
+      <div class="form-group">
+        <label>Material</label>
+        <input type="text" class="form-control" name="material" placeholder="Cotton" [(ngModel)]="product.material"/>
+      </div>
+      <div class="form-group">
+        <label>Size</label>
+        <input type="text" class="form-control" name="size" placeholder="42-48" [(ngModel)]="product.size"/>
+      </div>
+      <div class="form-group">
+        <label>Color</label>
+        <input type="text" class="form-control" name="color" placeholder="Red"
+               [style.color]="product.color" [(ngModel)]="product.color"/>
+      </div>
+      <!--Create auto-enter current date (type=date)-->
+      <div class="form-group">
+        <label>Date Of Last Change</label>
+        <input type="text" class="form-control" name="dateOfLastChance" placeholder="16.02.2005 15:00"
+               [(ngModel)]="product.dateOfLastChange"/>
+      </div>
+      <div class="form-group">
+        <label>Product Picture</label>
+        <img src="{{product.image}}" alt="{{product.id}}" width="50" height="50">
+        <input type="text" class="form-control" name="image" placeholder="link on picture" [(ngModel)]="product.image"/>
+
+      </div>
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary"
+                [class.btn-warning]="editing" [disabled]="form.invalid">
+          {{editing ? "Save" : "Create"}}
+        </button>
+        <button type="reset" class="btn btn-secondary" routerLink="/product/table">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

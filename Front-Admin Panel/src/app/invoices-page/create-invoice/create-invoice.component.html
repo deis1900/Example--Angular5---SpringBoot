@@ -1,0 +1,90 @@
+<button mat-raised-button (click)="isLinear = true" id="toggle-linear">Fill form</button>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-3">
+            <span><h4> At first, we choose new identifier for new invoice.
+              Сначала выберем новый идентификатор для Нового чека</h4><br>
+            -----></span>
+    </div>
+    <div class="col-lg-3">
+            <span><h4> Enter customer login. Далее выберем покупателя</h4><br>
+            (только зарегистрированные пользователи мошут совершать покупки)<br>
+            -----></span>
+    </div>
+    <div class="col-lg-3">
+            <span><h4> Enter Products. Что купим? Выберем товары</h4><br>
+            (для выбора просто жмем отметить)<br>
+            -----></span>
+    </div>
+    <div class="col-lg-3">
+            <span><h4> Для сохранения чека нажмем кнопочку "Save"</h4>
+            (Предварительно проверим созданный чек)<br>
+            -----></span>
+    </div>
+  </div>
+</div>
+<mat-horizontal-stepper [linear]="isLinear">
+  <mat-step [stepControl]="firstFormGroup">
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel>Fill out your name</ng-template>
+      <mat-form-field>
+        <input matInput placeholder="Enter new Invoice Id" formControlName="firstCtrl" required>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="secondFormGroup">
+    <form [formGroup]="secondFormGroup">
+      <ng-template matStepLabel>Fill out your address</ng-template>
+      <mat-form-field>
+        <input matInput placeholder="Exapmle: Lar " formControlName="secondCtrl" required>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+      <div class="container-fluid">
+        <app-customer-page></app-customer-page>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [formGroup]="thirdFormGroup">
+    <form [formGroup]="thirdFormGroup">
+    <ng-template matStepLabel>Choose products</ng-template>
+      <mat-form-field>
+        <input matInput placeholder="Example: 6, 4, 7" formControlName="firstCtrl" required>
+      </mat-form-field>
+
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button matStepperNext>Next</button>
+    </div>
+      <div class="container-fluid">
+        <app-products-page></app-products-page>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="fourthFormGroup">
+    <form [formGroup]="fourthFormGroup">
+      <ng-template matStepLabel>Done</ng-template>
+      <mat-form-field>
+        <input matInput placeholder="Amount" formControlName="fourthCtrl" required>
+        <button>Save Invoice</button>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+      </div>
+      <div class="container-fluid">
+        <h3>Your choice</h3>
+        <app-invoice></app-invoice>
+        <button>Save Invoice</button>
+      </div>
+    </form>
+  </mat-step>
+</mat-horizontal-stepper>
+
+
+

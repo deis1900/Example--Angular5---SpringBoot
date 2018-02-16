@@ -1,0 +1,124 @@
+<div class="row">
+  <div id="STInput" class="input-field col s6">
+    <input id="type_name" class="validate" [(ngModel)]="searchInvoice">
+    <label class="active" for="type_name">Search by login(example: UserName)</label>
+  </div>
+</div>
+<div class="row">
+  <div class="col s4" *ngFor="let invoice of invoices | searchInInvoiceUser: searchInvoice" appHover>
+    <div class="card">
+      <div id="cTitle" class="card-title">
+        <span>
+          <h4>Invoice Id: <span >{{invoice.id}}</span></h4>
+        </span>
+      </div>
+     <div class="card-content">
+        <mat-accordion class="example-headers-align">
+          <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle="true">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <h4>Invoice Data</h4>
+              </mat-panel-title>
+              <mat-panel-description>
+                About invoice
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <div class="card-text">
+              <h5>
+                <ul>
+                  <li type="none">Invoice amount: {{invoice.amount}}</li>
+                  <li type="none">Date of purchase: {{invoice.checkDate | date: 'dd.MM.yyyy HH:mm'}}</li>
+                </ul>
+              </h5>
+            </div>
+
+            <mat-action-row>
+              <button mat-button color="primary" (click)="nextStep()">Next</button>
+            </mat-action-row>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle="true">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <h4>Customer</h4>
+              </mat-panel-title>
+              <mat-panel-description>
+                {{invoice.customer.userName}}
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <div class="card-text">
+              <h5>
+                <ul>
+                  <li type="none">User name: {{invoice.customer.userName}}</li>
+                  <li type="none">First name: {{invoice.customer.firstName}}</li>
+                  <li type="none">Last name: {{invoice.customer.lastName}}</li>
+                  <li type="none">Sex: {{invoice.customer.sex}}</li>
+                  <li type="none">Phone: {{invoice.customer.phone}}</li>
+                  <li type="none">Email: {{invoice.customer.email}}
+                    <img
+                      src="{{invoice.customer.image}}"
+                      alt="{{invoice.customer.userName}}"
+                      width="60px" height="50px">
+                  </li>
+                </ul>
+              </h5>
+            </div>
+
+            <mat-action-row>
+              <button mat-button color="warn" (click)="prevStep()">Previous</button>
+              <button mat-button color="primary" (click)="nextStep()">Next</button>
+            </mat-action-row>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle="true">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <h4>Products</h4>
+              </mat-panel-title>
+              <mat-panel-description>
+                About purchases
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <div class="card-text" *ngFor="let product of invoice.products">
+              <h5>
+                <ul>
+                  <li type="none">Product Id: {{product.id}}</li>
+                  <li type="none">Category: {{product.typeOfClothes}}</li>
+                  <li type="none">Color: {{product.color}} [style.color]="{{product.color}}"</li>
+                  <li type="none">Material: {{product.material}}</li>
+                  <br>
+                  <li><img
+                      src="{{product.image}}"
+                      alt="{{product.typeOfClothes}}"
+                      width="120px" height="75px">
+                  </li>
+                  <br>
+                </ul>
+              </h5>
+            </div>
+
+            <mat-action-row>
+              <button mat-button color="warn" (click)="prevStep()">Previous</button>
+              <button mat-button color="primary" (click)="nextStep()">End</button>
+            </mat-action-row>
+          </mat-expansion-panel>
+
+        </mat-accordion>
+        <!--<ul>-->
+        <!--<li type="none">Номер Чека:<span>{{invoice.id}}</span></li>-->
+        <!--<li type="none">Тип продукта:<span>{{invoice.amount}}</span></li>-->
+        <!--<li type="none">Материал:<span>{{invoice.checkDate}}</span></li>-->
+        <!--<li type="none">Дата изменения:<span>{{invoice.customer.userName}}</span></li>-->
+        <!--</ul>-->
+      </div>
+      <div class="card-action">
+        <a class="waves-effect waves-light btn"
+           (click)="onClick()">Отметить</a>
+      </div>
+    </div>
+  </div>
+</div>
+

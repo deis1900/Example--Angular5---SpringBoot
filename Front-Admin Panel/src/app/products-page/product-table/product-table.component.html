@@ -1,0 +1,81 @@
+<h2>Table Products</h2>
+<div class="product-header">
+  <mat-form-field>
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+  </mat-form-field>
+</div>
+<br>
+
+<div class="product-container mat-elevation-z16">
+  <mat-table [dataSource]="dataSource" matSort>
+
+    <!-- ID Column -->
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.id}}
+      <button class="btn btn-warning btn-sm"
+              [routerLink]="['/product/table/edit', row.id,
+                        {typeOfClothes: row.typeOfClothes,
+                        material: row.material,
+                        size: row.size,
+                        color: row.color,
+                        dateOfLastChange: row.dateOfLastChange,
+                        image: row.image}]">
+        Edit
+      </button>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Type of clothes Column -->
+    <ng-container matColumnDef="typeOfClothes">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Type of clothes </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.typeOfClothes}}</mat-cell>
+    </ng-container>
+
+    <!-- Material Column -->
+    <ng-container matColumnDef="material">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Material </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.material}} </mat-cell>
+    </ng-container>
+
+    <!-- Size Column -->
+    <ng-container matColumnDef="size">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Size </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.size}} </mat-cell>
+    </ng-container>
+
+    <!-- Color Column -->
+    <ng-container matColumnDef="color">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Color </mat-header-cell>
+      <mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.color}} </mat-cell>
+    </ng-container>
+
+    <!-- Date of last Change Column -->
+    <ng-container matColumnDef="dateOfLastChange">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>  Date of last Change </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.dateOfLastChange | date: "dd.MM.yy HH:mm"}} </mat-cell>
+    </ng-container>
+
+    <!-- Image Column -->
+    <ng-container matColumnDef="image">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Picture </mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <img src="{{row.image}}" alt="{{row.image}}" width="80px" height="100px">
+        <br>
+        <button class="btn btn-danger btn-sm" (click)="deleteProduct(row.id)">
+          Delete
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;">
+    </mat-row>
+  </mat-table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+</div>
+<br>
+<button class="btn btn-primary" [routerLink]="['/product/table', 'create']">
+  Create New Product
+</button>

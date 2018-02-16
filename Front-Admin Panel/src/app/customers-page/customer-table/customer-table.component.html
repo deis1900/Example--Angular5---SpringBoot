@@ -1,0 +1,103 @@
+<h2>Table Customers</h2>
+<div class="product-header">
+  <mat-form-field>
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+  </mat-form-field>
+</div>
+<br>
+
+<div class="product-container mat-elevation-z16">
+  <mat-table [dataSource]="dataSource" matSort>
+
+    <!-- ID Column -->
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> ID</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.id}}__
+        <button class="btn btn-warning btn-sm"
+                [routerLink]="['/customer/table/edit', row.id,
+                        {firstName: row.firstName,
+                        lastName: row.lastName,
+                        userName: row.userName,
+                        password: row.password,
+                        email: row.email,
+                        sex: row.sex,
+                        phone: row.phone,
+                        access: row.access,
+                        image: row.image}]">
+          Edit
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <!--First Name Column-->
+    <ng-container matColumnDef="firstName">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>First name</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.firstName}}</mat-cell>
+    </ng-container>
+
+    <!-- Last Name Column -->
+    <ng-container matColumnDef="lastName">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Last name</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.lastName}}</mat-cell>
+    </ng-container>
+
+    <!-- User Name Column -->
+    <ng-container matColumnDef="userName">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> User Name</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.userName}}</mat-cell>
+    </ng-container>
+
+    <!-- Password Column -->
+    <ng-container matColumnDef="password">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Password</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.password}}</mat-cell>
+    </ng-container>
+
+    <!-- Email Column -->
+    <ng-container matColumnDef="email">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Email</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.email}}</mat-cell>
+    </ng-container>
+
+    <!-- Sex Column -->
+    <ng-container matColumnDef="sex">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Sex</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.sex}}</mat-cell>
+    </ng-container>
+
+    <!-- Phone Column -->
+    <ng-container matColumnDef="phone">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Phone number</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.phone}}</mat-cell>
+    </ng-container>
+
+    <!-- Access Column -->
+    <ng-container matColumnDef="access">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Access</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.access}}</mat-cell>
+    </ng-container>
+
+    <!-- Image Column -->
+    <ng-container matColumnDef="image" cssClassFriendlyName="">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Foto</mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <img src="{{row.image}}" alt="{{row.image}}" width="80px" height="100px">
+        <button class="btn btn-danger btn-sm" (click)="deleteCustomer(row.id)">
+          Delete
+        </button>
+      </mat-cell>
+    </ng-container>
+
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;">
+    </mat-row>
+  </mat-table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+</div>
+<br>
+<button class="btn btn-primary" [routerLink]="['/customer/table', 'create']">
+  Create New Customer
+</button>
+<router-outlet></router-outlet>

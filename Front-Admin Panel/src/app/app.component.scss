@@ -1,0 +1,14 @@
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+.NameStore {
+  height: 150px;
+  background-image: url(http://www.greenlightstaff.com/wp-content/uploads/2015/05/about-us-1920x150.jpg)
+}

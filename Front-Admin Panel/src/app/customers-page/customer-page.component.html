@@ -1,0 +1,35 @@
+<router-outlet ></router-outlet>
+<div class="row">
+  <div id = "STInput" class="input-field col s6">
+    <input id="type_name" class="validate" [(ngModel)]="searchUserName">
+    <label class="active" for="type_name">Логин</label>
+  </div>
+</div>
+<div class="row">
+  <div class="col s3" *ngFor="let customer of customers | searchCustomer: searchUserName" appHover>
+    <div class="card">
+      <div class="card-image">
+        <img src="{{customer.image}}">
+        <span class="card-title"
+              [ngClass]="{'marked': isMarked}"
+        >{{customer.userName}}
+      </span>
+      </div>
+      <div class="card-content">
+        <ul>
+          <li type="none">Имя:<span>{{customer.firstName}} </span></li>
+          <li type="none">Фамилия:<span>{{customer.lastName}} </span></li>
+          <li type="none">Email:<span>{{customer.email}}</span></li>
+          <li type="none">Пол:<span>{{customer.sex}}</span></li>
+          <li type="none">Телефон:<span>{{customer.phone}}</span></li>
+          <li type="none">Логин:<span>{{customer.userName}}</span></li>
+        </ul>
+      </div>
+      <div class="card-action">
+        <a class="waves-effect waves-light btn"
+           (click)="onClick()">Отметить</a>
+      </div>
+    </div>
+  </div>
+</div>
+

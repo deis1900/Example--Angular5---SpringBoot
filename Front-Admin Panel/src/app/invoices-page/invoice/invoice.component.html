@@ -1,0 +1,59 @@
+<div class="row">
+  <div class="col-lg-4 ">
+    <div class="container-fluid">
+      <ul>
+        <li><h2><span>Id: {{invoice.id}}</span></h2></li>
+        <li><h4><span>Amount: {{invoice.amount}}</span></h4></li>
+        <li><h4><span>Check Date: {{invoice.checkDate | date: 'dd.MM.yyyy HH:mm'}}</span></h4></li>
+      </ul>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <!--Create input <app-user> with parameters-->
+    <div class="container">
+      <div class="row">
+        <div class="col s2">
+          <div class="card">
+            <div class="card-image">
+              <img src="{{invoice.customer.image}}" height="260px">
+              <span class="card-title"
+              >
+          {{invoice.customer.userName}}
+      </span>
+            </div>
+            <div class="card-content">
+              <ul>
+                <li type="none">Имя:<span>{{invoice.customer.firstName}} </span></li>
+                <li type="none">Фамилия:<span>{{invoice.customer.lastName}} </span></li>
+                <li type="none">Email:<span>{{invoice.customer.email}}</span></li>
+                <li type="none">Пол:<span>{{invoice.customer.sex}}</span></li>
+                <li type="none">Телефон:<span>{{invoice.customer.phone}}</span></li>
+                <li type="none">Логин:<span>{{invoice.customer.userName}}</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid">
+  <!--Create input <app-product-page> with parameters-->
+  <div class="row">
+    <div class="col s3" *ngFor="let product of invoice.products">
+      <div class="card">
+        <div class="card-image">
+          <img src="{{product.image}}">
+          <span class="card-title">{{product.color}}</span></div>
+        <div class="card-content">
+          <ul>
+            <li type="none">Тип продукта:<span>{{product.typeOfClothes}}</span></li>
+            <li type="none">Материал:<span>{{product.material}}</span></li>
+            <li type="none">Размер:<span>{{product.size}}</span></li>
+            <li type="none">Дата изменения:<span>{{product.dateOfLastChange | date: 'dd.MM.yyyy HH:mm'}}</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

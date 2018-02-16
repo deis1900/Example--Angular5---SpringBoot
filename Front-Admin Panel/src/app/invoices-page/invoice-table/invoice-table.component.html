@@ -1,0 +1,161 @@
+<h2>Table Invoice</h2>
+<div class="invoice-header">
+  <mat-form-field>
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+  </mat-form-field>
+</div>
+<br>
+
+<div class="invoice-container mat-elevation-z16">
+  <mat-table [dataSource]="dataSource" matSort>
+
+    <!-- ID Column -->
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> ID</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.id}}
+        <br>
+        <button class="btn btn-warning btn-sm"
+                [routerLink]="['/invoice/table/edit', row.id,
+                        {invoiceId: row.invoiceId,
+                        amount: row.amount,
+                        checkDate: row.checkDate,
+                        customer: row.customer,
+                        products: row.products}]">
+          Edit
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <!--Amount Column-->
+    <ng-container matColumnDef="amount">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Amount</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.amount}}</mat-cell>
+    </ng-container>
+
+    <!-- Check Date Column -->
+    <ng-container matColumnDef="checkDate">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Check Date</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.checkDate | date: 'dd/MM/yy HH:mm'}}</mat-cell>
+    </ng-container>
+
+    <!-- User Name Column -->
+    <ng-container matColumnDef="customer.userName">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> User Name</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.customer.userName}}</mat-cell>
+    </ng-container>
+
+    <!-- First name Column -->
+    <ng-container matColumnDef="customer.firstName">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> First name</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.customer.firstName}}</mat-cell>
+    </ng-container>
+
+    <!-- Last name Column -->
+    <ng-container matColumnDef="customer.lastName">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Last name</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.customer.lastName}}</mat-cell>
+    </ng-container>
+
+    <!-- Email Column -->
+    <ng-container matColumnDef="customer.email">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Email</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.customer.email}}</mat-cell>
+    </ng-container>
+
+    <!-- Sex Column -->
+    <ng-container matColumnDef="customer.sex">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Sex</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.customer.sex}}</mat-cell>
+    </ng-container>
+
+    <!-- Phone Column -->
+    <ng-container matColumnDef="customer.phone">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Phone number</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.customer.phone}}</mat-cell>
+    </ng-container>
+
+    <!-- Product Id's Column -->
+    <ng-container matColumnDef="products.product[id]">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Product Id</mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <div *ngFor="let product of row.products">
+          <ul>
+            <li><span>{{product.id}}</span></li>
+          </ul>
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Product Type Of Clothes Column -->
+    <ng-container matColumnDef="products.product[typeOfClothes]">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Product type of clothes</mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <div *ngFor="let product of row.products">
+          <ul>
+            <li><span>{{product.typeOfClothes}}</span></li>
+          </ul>
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Product Material Column -->
+    <ng-container matColumnDef="products.product[material]">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Product Material</mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <div *ngFor="let product of row.products">
+        <ul>
+          <li><span>{{product.material}}</span></li>
+        </ul>
+      </div>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Product Size Column -->
+    <ng-container matColumnDef="products.product[size]">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Product size</mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <div *ngFor="let product of row.products">
+          <ul>
+            <li><span>{{product.size}}</span></li>
+          </ul>
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Product Color Column -->
+    <ng-container matColumnDef="products.product[color]">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Product color</mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <div *ngFor="let product of row.products">
+          <ul>
+            <li><span>{{product.color}}</span></li>
+          </ul>
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Product Image Column -->
+    <ng-container matColumnDef="products.product[image]">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Product image</mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <div *ngFor="let product of row.products">
+          <ul>
+            <li><img src="{{product.image}}" alt="product.id" height="50px"></li>
+          </ul>
+        </div>
+      </mat-cell>
+    </ng-container>
+
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;">
+    </mat-row>
+  </mat-table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+</div>
+<br>
+<button class="btn btn-primary" [routerLink]="['/invoice/table', 'create']">
+  Create New Invoice
+</button>
+

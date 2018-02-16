@@ -1,0 +1,59 @@
+<div class="Registration">
+  <div class="col-xs-10">
+    <div class="bg-primary p-a-1" [class.bg-warning]="editing">
+      <h5>{{editing ? "Edit" : "Create"}} Customer</h5>
+    </div>
+    <form novalidate #form="ngForm" (ngSubmit)="submitForm(form)" (reset)="resetForm()">
+      <div class="form-group">
+        <label>Id</label>
+        <input class="form-control" name="Id" placeholder="1211" [(ngModel)]="customer.id"/>
+      </div>
+      <div class="form-group">
+        <label>Имя</label>
+        <input class="form-control" name="FirstName" placeholder="Василий" [(ngModel)]="customer.firstName"/>
+      </div>
+      <div class="form-group">
+        <label>Фамилия</label>
+        <input type="text" class="form-control" name="lastName" placeholder="Васильев" [(ngModel)]="customer.lastName"/>
+      </div>
+      <div class="form-group">
+        <label>Логин</label>
+        <input type="text" class="form-control" name="userName" placeholder="VasTooDas"
+               [(ngModel)]="customer.userName"/>
+      </div>
+      <div class="form-group">
+        <label>Пароль</label>
+        <input type="password" class="form-control" name="password" placeholder="не менее 8 символов"
+               [(ngModel)]="customer.password"/>
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" class="form-control" name="Email" placeholder="VasTooDas@outlook.com"
+               [(ngModel)]="customer.email"/>
+      </div>
+      <div class="form-group">
+        <label>Телефон</label>
+        <input type="text" class="form-control" name="phone" placeholder="+380xx-xxx-xx-xx"
+               [(ngModel)]="customer.phone"/>
+      </div>
+
+      <div class="form-group">
+        <label>Пол</label>
+        <input type="text" class="form-control" name="sex" placeholder="Мужской" [(ngModel)]="customer.sex"/>
+      </div>
+      <div class="form-group">
+        <label>Фото</label>
+        <img src="{{customer.image}}" alt="{{customer.userName}}" width="50" height="50">
+        <input type="text" class="form-control" name="image" placeholder="Ссылка на фото" [(ngModel)]="customer.image"/>
+
+      </div>
+      <div class="form-group">
+       <button type="submit" class="btn btn-primary"
+                [class.btn-warning]="editing" [disabled]="form.invalid">
+          {{editing ? "Save" : "Create"}}
+        </button>
+        <button type="reset" class="btn btn-secondary" routerLink="/customer/table">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
