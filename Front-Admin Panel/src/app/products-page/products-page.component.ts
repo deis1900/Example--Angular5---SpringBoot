@@ -8,7 +8,7 @@ import {ProductsService} from './product/product.service';
   styleUrls: ['./products-page.component.scss'],
 
 })
-export class ProductsPageComponent implements OnInit{
+export class ProductsPageComponent implements OnInit {
 
   products: Product[];
   isMarked = false;

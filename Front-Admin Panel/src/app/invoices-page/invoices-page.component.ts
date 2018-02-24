@@ -10,14 +10,20 @@ import {Product} from '../products-page/product/product';
 })
 export class InvoicesPageComponent implements OnInit {
   invoices: Invoice[];
-  products: Product[] = [];
   isMarked = false;
   step = 0;
   searchInvoice = '';
   constructor(private invoiceService: InvoiceService) {
   }
   ngOnInit() {
-    this.invoices = this.invoiceService.getInvoice();
+    this.getInvoiceList();
+  }
+  getInvoiceList(): Invoice [] {
+  this.invoiceService.getInvoices().subscribe(list => {
+    this.invoices = list;
+    console.log(this.invoices);
+  });
+    return this.invoices;
   }
 
   setStep(index: number) {

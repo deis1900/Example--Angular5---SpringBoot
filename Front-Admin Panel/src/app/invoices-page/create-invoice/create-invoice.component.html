@@ -55,7 +55,7 @@
     <form [formGroup]="thirdFormGroup">
     <ng-template matStepLabel>Choose products</ng-template>
       <mat-form-field>
-        <input matInput placeholder="Example: 6, 4, 7" formControlName="firstCtrl" required>
+        <input matInput placeholder="Example: 6, 4, 7" formControlName="thirdCtrl" required>
       </mat-form-field>
 
     <div>
@@ -80,7 +80,7 @@
       <div class="container-fluid">
         <h3>Your choice</h3>
         <app-invoice></app-invoice>
-        <button>Save Invoice</button>
+        <button (click)="submitForm(invoice)">Save Invoice</button>
       </div>
     </form>
   </mat-step>

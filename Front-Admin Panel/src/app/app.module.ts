@@ -40,8 +40,8 @@ import {UsersService} from './customers-page/user/user.service';
 import {SearchCustomerPipe} from './customers-page/searchCustomer.pipe';
 import {InvoiceTableComponent} from './invoices-page/invoice-table/invoice-table.component';
 import {SearchInvoicePipe} from './invoices-page/searchInvoice.pipe';
-import {InvoiceService} from './invoices-page/invoice/invoice.service';
 import {CreateInvoiceComponent} from './invoices-page/create-invoice/create-invoice.component';
+import {InvoiceService} from './invoices-page/invoice/invoice.service';
 
 const appRoutes: Routes = [
   {
@@ -67,7 +67,7 @@ const appRoutes: Routes = [
   {path: 'invoice/table', component: InvoiceTableComponent},
   {path: 'invoice/:id', component: InvoiceComponent},
   {
-    path: '**', redirectTo: '/'
+    path: '**/*', redirectTo: '/'
   },
 ];
 
@@ -113,7 +113,7 @@ const appRoutes: Routes = [
     MatCheckboxModule,
     ReactiveFormsModule,
   ],
-  providers: [ProductsService, UsersService, InvoiceService, {provide: MatStepperIntl, useClass: CreateInvoiceComponent},],
+  providers: [ InvoiceService, ProductsService, UsersService, {provide: MatStepperIntl, useClass: CreateInvoiceComponent}],
   bootstrap: [AppComponent]
 })
 export class AppModule {

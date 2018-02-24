@@ -13,7 +13,6 @@ export class ProductTableComponent {
   dataSource: MatTableDataSource<Product>;
   products: Product[];
 
-
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 

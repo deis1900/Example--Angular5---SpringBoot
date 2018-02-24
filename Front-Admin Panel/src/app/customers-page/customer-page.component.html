@@ -9,7 +9,7 @@
   <div class="col s3" *ngFor="let customer of customers | searchCustomer: searchUserName" appHover>
     <div class="card">
       <div class="card-image">
-        <img src="{{customer.image}}">
+        <img class="card-pict" src="{{customer.image}}">
         <span class="card-title"
               [ngClass]="{'marked': isMarked}"
         >{{customer.userName}}

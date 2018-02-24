@@ -3,11 +3,13 @@ import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs/Subscription';
 import {Invoice} from './invoice';
 import {InvoiceService} from './invoice.service';
+import {ProductsService} from '../../products-page/product/product.service';
 
 @Component({
   selector: 'app-invoice',
   templateUrl: './invoice.component.html',
-  styleUrls: ['./invoice.component.scss']
+  styleUrls: ['./invoice.component.scss'],
+  providers: [ProductsService],
 })
 export class InvoiceComponent implements OnInit {
   id: number;
@@ -21,7 +23,9 @@ export class InvoiceComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.invoice = this.invoiceService.getInvoice()[this.id];
+    this.invoiceService.getInvoice(this.id).subscribe(data => {
+      this.invoice = data;
+    });
   }
 
 }

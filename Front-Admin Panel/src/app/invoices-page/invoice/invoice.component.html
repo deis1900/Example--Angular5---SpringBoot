@@ -3,7 +3,7 @@
     <div class="container-fluid">
       <ul>
         <li><h2><span>Id: {{invoice.id}}</span></h2></li>
-        <li><h4><span>Amount: {{invoice.amount}}</span></h4></li>
+        <li><h4><span>Amount: {{invoice.amount}} {{invoice.currency | currency}}</span></h4></li>
         <li><h4><span>Check Date: {{invoice.checkDate | date: 'dd.MM.yyyy HH:mm'}}</span></h4></li>
       </ul>
     </div>

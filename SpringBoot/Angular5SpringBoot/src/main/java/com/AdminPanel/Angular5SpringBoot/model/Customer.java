@@ -2,6 +2,8 @@ package com.AdminPanel.Angular5SpringBoot.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Customer")
@@ -11,32 +13,35 @@ public class Customer implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column(name = "FIRST_NAME")
+    @Column
     String firstName;
 
-    @Column(name = "LAST_NAME")
+    @Column
     String lastName;
 
-    @Column(name = "USER_NAME", unique = true)
+    @Column(unique = true)
     String userName;
 
-    @Column(name = "PASSWORD_NAME")
+    @Column
     String password;
 
-    @Column(name = "EMAIL", unique = true)
+    @Column(unique = true)
     String email;
 
-    @Column(name = "SEX")
+    @Column
     String sex;
 
-    @Column(name = "PHONE", unique = true)
+    @Column(unique = true)
     Integer phone;
 
-    @Column(name = "ACCESS")
+    @Column
     Boolean access;
 
-    @Column(name = "IMAGE")
+    @Column
     String image;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<Invoice> invoices = new ArrayList<>();
 
     public Customer(String firstName, String lastName, String userName, String password, String email,
                     String sex, Integer phone, Boolean access, String image) {
@@ -140,6 +145,7 @@ public class Customer implements Serializable {
                         "password='%s', email='%s', sex='%s', phone=%d, access='%s', image='%s']",
                 id, firstName, lastName, userName, password, email, sex, phone, access, image);
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -173,5 +179,4 @@ public class Customer implements Serializable {
         result = 31 * result + (image != null ? image.hashCode() : 0);
         return result;
     }
-
 }

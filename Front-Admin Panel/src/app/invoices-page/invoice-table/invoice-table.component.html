@@ -18,6 +18,7 @@
                 [routerLink]="['/invoice/table/edit', row.id,
                         {invoiceId: row.invoiceId,
                         amount: row.amount,
+                        currency: row.currency,
                         checkDate: row.checkDate,
                         customer: row.customer,
                         products: row.products}]">
@@ -30,6 +31,12 @@
     <ng-container matColumnDef="amount">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Amount</mat-header-cell>
       <mat-cell *matCellDef="let row"> {{row.amount}}</mat-cell>
+    </ng-container>
+
+    <!--Currency Column-->
+    <ng-container matColumnDef="currency">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Currency</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.currency}}</mat-cell>
     </ng-container>
 
     <!-- Check Date Column -->

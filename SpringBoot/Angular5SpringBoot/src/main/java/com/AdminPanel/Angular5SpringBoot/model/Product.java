@@ -1,6 +1,8 @@
 package com.AdminPanel.Angular5SpringBoot.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Product")
@@ -8,27 +10,31 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
-    @Column(name = "TYPE_OF_CLOTHES")
-    String typeOfClothes;
+    @Column
+    private String typeOfClothes;
 
-    @Column(name = "MATERIAL")
-    String material;
+    @Column
+    private String material;
 
-    @Column(name = "SIZE")
-    String size;
+    @Column
+    private String size;
 
-    @Column(name = "COLOR")
-    String color;
+    @Column
+    private String color;
 
-    @Column(name = "DATE_OF_LAST_CHANGE")
-    Long dateOfLastChange;
+    @Column
+    private Long dateOfLastChange;
 
-    @Column(name = "IMAGE")
-    String image;
+    @Column
+    private String image;
+
+    @ManyToMany(targetEntity = Invoice.class)
+    private List<Invoice> invoices = new ArrayList<>();
 
     public Product(Long id, String typeOfClothes, String material, String size, String color, Long dateOfLastChange, String image) {
+        this.id = id;
         this.typeOfClothes = typeOfClothes;
         this.material = material;
         this.size = size;

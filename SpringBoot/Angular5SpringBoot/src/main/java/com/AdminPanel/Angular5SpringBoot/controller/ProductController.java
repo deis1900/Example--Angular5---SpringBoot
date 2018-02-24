@@ -25,7 +25,6 @@ public class ProductController {
     public ResponseEntity<ProductDto> getAll() {
         ProductDto wrapper = new ProductDto();
         wrapper.setListProducts(productService.findAll());
-
         return new ResponseEntity<>(wrapper, HttpStatus.OK);
     }
 
@@ -52,14 +51,12 @@ public class ProductController {
 
     @PutMapping(value = "/{id}")
     public Product updateProduct(@RequestBody Product product) {
-        System.out.println(product);
         productService.updateProduct(product);
         return product;
     }
 
     @GetMapping(value = "/typeofclothes/{typeOfClothes}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> findByTypeOfClothes(@PathVariable String typeOfClothes) {
-
         List<Product> products = productService.findByTypeOfClothes(typeOfClothes);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
