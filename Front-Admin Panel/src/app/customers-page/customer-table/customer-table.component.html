@@ -12,7 +12,7 @@
     <!-- ID Column -->
     <ng-container matColumnDef="id">
       <mat-header-cell *matHeaderCellDef mat-sort-header> ID</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.id}}__
+      <mat-cell *matCellDef="let row"> {{row.id}}
         <button class="btn btn-warning btn-sm"
                 [routerLink]="['/customer/table/edit', row.id,
                         {firstName: row.firstName,

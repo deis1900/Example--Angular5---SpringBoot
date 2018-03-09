@@ -47,8 +47,7 @@ export class CustomerTableComponent {
     filterValue = filterValue.toLowerCase();
     this.dataSource.filter = filterValue;
   }
-
-  deleteCustomer(key) {
-    this.userService.deleteUser(key);
+  deleteCustomer(key): void {
+    this.userService.deleteUser(key).subscribe();
   }
 }

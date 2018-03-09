@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {User} from '../user/user';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UsersService} from '../user/user.service';
@@ -10,11 +10,11 @@ import 'rxjs/add/operator/map';
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.scss']
 })
-export class RegistrationComponent implements OnInit {
-  customer: User;
+export class RegistrationComponent {
+  customer: User = new User(null, ' ', '', '', '', '', '', null, false, '');
   editing = false;
   customers: User [];
-  constructor(private usersService: UsersService, activeRoute: ActivatedRoute,
+  constructor(private usersService: UsersService, private activeRoute: ActivatedRoute,
               private router: Router) {
     this.editing = activeRoute.snapshot.params['mode'] === 'edit';
     const id = activeRoute.snapshot.params['id'];
@@ -52,8 +52,9 @@ export class RegistrationComponent implements OnInit {
           .map(data => {
               const users = data['listCustomers'];
               return users.filter(item => item.id === id)
-                || new User(undefined, ' ', '', '',
-                  '', '', '', null, false, '');
+                ||
+                new User(null, ' ', '', '', '', '', '',
+                  null, false, '');
             }
           )
         );
@@ -61,8 +62,6 @@ export class RegistrationComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
-  }
   submitForm(form: NgForm) {
     if (form.valid) {
       if (this.editing === true) {
@@ -70,13 +69,13 @@ export class RegistrationComponent implements OnInit {
       } else {
         this.usersService.postUser(this.customer).subscribe(user => this.customers.push(user));
       }
-      this.router.navigateByUrl('/customer/table');
+      this.router.navigate(['/customer/', this.customer.userName]);
     }
   }
 
   resetForm() {
     this.customer =
-      new User(undefined, ' ', '', '', '', '', '', 0, false, '');
+      new User(null, ' ', '', '', '', '', '', 0, false, '');
   }
 
 }

@@ -26,7 +26,6 @@ export class UsersService {
         map(
           data => {
             const user = data;
-            console.log(user);
             return user;
           }
         ),
@@ -50,6 +49,10 @@ export class UsersService {
   postUser(user: User): Observable<User> {
     return this.http.post<User>(`/customer?body=`, user, this.httpOptions)
       .pipe(
+        map( data => {
+          const customer = data;
+          return customer;
+        }),
         catchError(this.handleError)
       );
   }
@@ -57,11 +60,15 @@ export class UsersService {
   updateUser(user: User): Observable<User> {
     return this.http.put<User>(`/customer/${user.id}`, user, this.httpOptions)
       .pipe(
+        map(data => {
+          const customer = data;
+          return customer;
+        }),
         catchError(this.handleError)
       );
   }
   deleteUser(id: number): Observable<{}> {
-    return this.http.delete(`/customer/delete/${id}`, this.httpOptions)
+    return this.http.delete(`/customer/${id}`, this.httpOptions)
       .pipe(
         catchError(this.handleError)
       );

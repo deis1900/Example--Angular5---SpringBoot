@@ -6,11 +6,11 @@
     <form novalidate #form="ngForm" (ngSubmit)="submitForm(form)" (reset)="resetForm()">
       <div class="form-group">
         <label>Id</label>
-        <input class="form-control" name="Id" placeholder="1211" [(ngModel)]="customer.id"/>
+        <input class="form-control" name="id" placeholder="1211" [(ngModel)]="customer.id"/>
       </div>
       <div class="form-group">
         <label>Имя</label>
-        <input class="form-control" name="FirstName" placeholder="Василий" [(ngModel)]="customer.firstName"/>
+        <input class="form-control" name="firstName" placeholder="Василий" [(ngModel)]="customer.firstName"/>
       </div>
       <div class="form-group">
         <label>Фамилия</label>
@@ -28,7 +28,7 @@
       </div>
       <div class="form-group">
         <label>Email</label>
-        <input type="email" class="form-control" name="Email" placeholder="VasTooDas@outlook.com"
+        <input type="email" class="form-control" name="email" placeholder="VasTooDas@outlook.com"
                [(ngModel)]="customer.email"/>
       </div>
       <div class="form-group">

@@ -9,6 +9,5 @@ export class User {
               public sex: string,
               public phone: number,
               public access: boolean,
-              public image: string) {
-  }
+              public image: string) { }
 }

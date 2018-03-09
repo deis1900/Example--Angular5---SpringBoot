@@ -7,12 +7,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private CustomerRepository customerRepository;
+
+    @Override
+    @Transactional
+    public Boolean isCustomerExist(Customer customer) {
+        return findByEmail(customer.getEmail()) != null;
+    }
 
     @Override
     @Transactional
@@ -40,11 +47,21 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     @Transactional
+    public Customer findById(Long id){
+        for(Customer customer: customerRepository.findAll()){
+            if(customer.getId() == id){
+                return customer;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    @Transactional
     public Customer findByUserName(String userName) {
        return customerRepository.findByUserName(userName);
     }
 
-    @Override
     @Transactional
     public Customer findByEmail(String email) {
        return customerRepository.findByEmail(email);

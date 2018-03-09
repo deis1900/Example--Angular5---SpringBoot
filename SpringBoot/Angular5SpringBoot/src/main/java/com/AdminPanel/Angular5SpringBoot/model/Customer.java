@@ -6,8 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "Customer")
+@Table(name = "Customer",
+        indexes = {
+        @Index(name = "customer_email", columnList = "email"),
+        @Index(name = "customer_login", columnList = "userName"),
+        @Index(name = "customer_phone", columnList = "phone") })
 public class Customer implements Serializable {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +34,8 @@ public class Customer implements Serializable {
     String email;
 
     @Column
-    String sex;
+    @Enumerated(EnumType.STRING)
+    Sex gender;
 
     @Column(unique = true)
     Integer phone;
@@ -44,13 +50,13 @@ public class Customer implements Serializable {
     private List<Invoice> invoices = new ArrayList<>();
 
     public Customer(String firstName, String lastName, String userName, String password, String email,
-                    String sex, Integer phone, Boolean access, String image) {
+                    Sex gender, Integer phone, Boolean access, String image) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
         this.password = password;
         this.email = email;
-        this.sex = sex;
+        this.gender = gender;
         this.phone = phone;
         this.access = access;
         this.image = image;
@@ -59,6 +65,10 @@ public class Customer implements Serializable {
     protected Customer() {
     }
 
+    public enum Sex {
+        Men,
+        Women
+    }
     public Long getId() {
         return id;
     }
@@ -107,12 +117,12 @@ public class Customer implements Serializable {
         this.email = email;
     }
 
-    public String getSex() {
-        return sex;
+    public Sex getGender() {
+        return gender;
     }
 
-    public void setSex(String sex) {
-        this.sex = sex;
+    public void setGender(Sex gender) {
+        this.gender = gender;
     }
 
     public Integer getPhone() {
@@ -139,11 +149,15 @@ public class Customer implements Serializable {
         this.image = image;
     }
 
+    public List<Invoice> getInvoices() {
+        return invoices;
+    }
+
     @Override
     public String toString() {
         return String.format("Customer[id=%d, firstName='%s', lastName='%s', userName='%s'," +
                         "password='%s', email='%s', sex='%s', phone=%d, access='%s', image='%s']",
-                id, firstName, lastName, userName, password, email, sex, phone, access, image);
+                id, firstName, lastName, userName, password, email, gender, phone, access, image);
     }
 
     @Override
@@ -154,29 +168,17 @@ public class Customer implements Serializable {
         Customer customer = (Customer) o;
 
         if (id != null ? !id.equals(customer.id) : customer.id != null) return false;
-        if (firstName != null ? !firstName.equals(customer.firstName) : customer.firstName != null) return false;
-        if (lastName != null ? !lastName.equals(customer.lastName) : customer.lastName != null) return false;
         if (userName != null ? !userName.equals(customer.userName) : customer.userName != null) return false;
-        if (password != null ? !password.equals(customer.password) : customer.password != null) return false;
         if (email != null ? !email.equals(customer.email) : customer.email != null) return false;
-        if (sex != null ? !sex.equals(customer.sex) : customer.sex != null) return false;
-        if (phone != null ? !phone.equals(customer.phone) : customer.phone != null) return false;
-        if (access != null ? !access.equals(customer.access) : customer.access != null) return false;
-        return image != null ? image.equals(customer.image) : customer.image == null;
+        return phone != null ? phone.equals(customer.phone) : customer.phone == null;
     }
 
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
-        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
         result = 31 * result + (userName != null ? userName.hashCode() : 0);
-        result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (sex != null ? sex.hashCode() : 0);
         result = 31 * result + (phone != null ? phone.hashCode() : 0);
-        result = 31 * result + (access != null ? access.hashCode() : 0);
-        result = 31 * result + (image != null ? image.hashCode() : 0);
         return result;
     }
 }

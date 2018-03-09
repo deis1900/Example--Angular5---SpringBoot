@@ -2,6 +2,7 @@ import {Component, ViewChild} from '@angular/core';
 import {Product} from '../product/product';
 import {ProductsService} from '../product/product.service';
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-product-table',
@@ -16,7 +17,7 @@ export class ProductTableComponent {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private productService: ProductsService) {
+  constructor(private productService: ProductsService, private router: Router) {
     this.productService.getProducts().subscribe(data => {
       if (!data) {
         return alert('No access to the server');
@@ -37,5 +38,6 @@ export class ProductTableComponent {
   }
   deleteProduct(id: number) {
     this.productService.deleteProduct(id).subscribe();
+    this.router.navigateByUrl('/product/table');
   }
 }

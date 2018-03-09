@@ -116,4 +116,11 @@ public class Invoice implements Serializable {
         result = 31 * result + (customer != null ? customer.hashCode() : 0);
         return result;
     }
+
+//    public enum OrderStatus {
+//        RECEIVED,
+//        PROCESSED,
+//        DELIVERED,
+//        RETURNED;
+//    }
 }
