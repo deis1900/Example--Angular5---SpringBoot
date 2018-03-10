@@ -34,9 +34,8 @@ public class CustomerController {
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Customer> getUser(@PathVariable("id") long id) {
+    public ResponseEntity<Customer> getUser(@PathVariable("id") Long id) {
         System.out.println("Fetching Customer with id " + id);
-
         Customer customer = customerService.findById(id);
         if (customer == null) {
             System.out.println("Customer with id " + id + " not found");
@@ -45,22 +44,30 @@ public class CustomerController {
         return new ResponseEntity<>(customer, HttpStatus.OK);
     }
 
+    @GetMapping(value="/login/{userName}",  produces=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> findByUserName(@PathVariable String userName) {
+        Customer customer = customerService.findByUserName(userName);
+        if (customer == null) {
+            System.out.println("Unable to find. Customer with userName " + userName + " not found");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return  new ResponseEntity<>(customer, HttpStatus.OK);
+    }
+
     @PostMapping (produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> postCustomer(@RequestBody Customer customer) {
         System.out.println("Creating Customer " + customer.getUserName());
-
         if (customerService.isCustomerExist(customer)) {
             System.out.println("A Customer with name " + customer.getUserName() + " already exist");
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
-//        Create test (for successfully download)
         customerService.save(new Customer(
                 customer.getFirstName(),
                 customer.getLastName(),
                 customer.getUserName(),
                 customer.getPassword(),
                 customer.getEmail(),
-                customer.getSex(),
+                customer.getGender(),
                 customer.getPhone(),
                 customer.getAccess(),
                 customer.getImage()));
@@ -75,19 +82,12 @@ public class CustomerController {
             System.out.println("User with id " + id + " not found");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        if (customer.equals(customerService.findById(customer.getId()))) {
+            System.out.println("A Customer with " + customer.getId() + " already exist ");
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
         customerService.updateCustomer(customer);
         return new ResponseEntity<>(customer, HttpStatus.OK);
-    }
-
-    @GetMapping(value="/{userName}",  produces=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> findByUserName(@PathVariable String userName) {
-
-        Customer customer = customerService.findByUserName(userName);
-        if (customer == null) {
-            System.out.println("Unable to find. Customer with userName " + userName + " not found");
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return  new ResponseEntity<>(customer, HttpStatus.OK);
     }
 
     @DeleteMapping(value="/{id}")

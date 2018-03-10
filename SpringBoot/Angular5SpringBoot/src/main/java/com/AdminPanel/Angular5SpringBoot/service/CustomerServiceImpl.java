@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -49,7 +48,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional
     public Customer findById(Long id){
         for(Customer customer: customerRepository.findAll()){
-            if(customer.getId() == id){
+            if(customer.getId().equals(id)){
                 return customer;
             }
         }

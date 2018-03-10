@@ -149,10 +149,6 @@ public class Customer implements Serializable {
         this.image = image;
     }
 
-    public List<Invoice> getInvoices() {
-        return invoices;
-    }
-
     @Override
     public String toString() {
         return String.format("Customer[id=%d, firstName='%s', lastName='%s', userName='%s'," +

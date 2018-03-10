@@ -47,7 +47,12 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public Product getOne(Long id) {
-        return productRepository.getOne(id);
+        for(Product product: productRepository.findAll()) {
+            if(id.equals(product.getId())) {
+                return product;
+            }
+        }
+        return null;
     }
 
     @Override

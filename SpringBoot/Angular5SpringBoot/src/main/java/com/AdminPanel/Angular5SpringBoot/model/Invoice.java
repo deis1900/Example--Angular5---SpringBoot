@@ -27,8 +27,8 @@ public class Invoice implements Serializable {
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
             name = "Invoices_Products",
-            joinColumns = { @JoinColumn(name = "invoice_id") },
-            inverseJoinColumns = { @JoinColumn(name = "product_id") }
+            joinColumns = { @JoinColumn(name = "invoice_id", nullable = false) },
+            inverseJoinColumns = { @JoinColumn(name = "product_id", nullable = false) }
     )
     private List<Product> products = new ArrayList<>();
 
