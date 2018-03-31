@@ -34,8 +34,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     @Transactional
-    public void saveAll(List<Customer> customerList) {
-        customerRepository.saveAll(customerList);
+    public List<Customer> saveAll(List<Customer> customerList) {
+
+        return customerRepository.saveAll(customerList);
     }
 
     @Override

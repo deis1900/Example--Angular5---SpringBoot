@@ -42,6 +42,7 @@ import {InvoiceTableComponent} from './invoices-page/invoice-table/invoice-table
 import {SearchInvoicePipe} from './invoices-page/searchInvoice.pipe';
 import {CreateInvoiceComponent} from './invoices-page/create-invoice/create-invoice.component';
 import {InvoiceService} from './invoices-page/invoice/invoice.service';
+import { FileUploaderComponent } from './file-uploader/file-uploader.component';
 
 const appRoutes: Routes = [
   {
@@ -93,6 +94,7 @@ const appRoutes: Routes = [
     InvoiceTableComponent,
     SearchInvoicePipe,
     CreateInvoiceComponent,
+    FileUploaderComponent,
   ],
   imports: [
     BrowserModule,

@@ -21,7 +21,7 @@ export class UsersService {
   constructor(private http: HttpClient) {
   }
   getUser(userName: string): Observable<User> {
-    return this.http.get(`/customer/username/${userName}`, this.httpOptions)
+    return this.http.get(`/customer/login/${userName}`, this.httpOptions)
       .pipe(
         map(
           data => {

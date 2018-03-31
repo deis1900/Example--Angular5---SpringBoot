@@ -1,5 +1,7 @@
 package com.AdminPanel.Angular5SpringBoot.model;
 
+import org.hibernate.validator.constraints.UniqueElements;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -10,7 +12,7 @@ import java.util.List;
 public class Product {
 
     @Id
-    @NotNull
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
@@ -44,7 +46,7 @@ public class Product {
         this.image = image;
     }
 
-    protected Product() {
+    public Product() {
     }
 
     public Long getId() {

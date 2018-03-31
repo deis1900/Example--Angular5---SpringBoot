@@ -1,6 +1,8 @@
 package com.AdminPanel.Angular5SpringBoot.controller;
 
 import com.AdminPanel.Angular5SpringBoot.dto.ProductDto;
+import com.AdminPanel.Angular5SpringBoot.fileWorkspace.CsvManager;
+import com.AdminPanel.Angular5SpringBoot.fileWorkspace.modelConvertors.ProductRows;
 import com.AdminPanel.Angular5SpringBoot.model.Product;
 import com.AdminPanel.Angular5SpringBoot.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
 @RestController
@@ -54,6 +58,28 @@ public class ProductController {
         return  new ResponseEntity<>(products, HttpStatus.OK);
     }
 
+    @PostMapping(value = "/upload",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List <Product>>  singleFileUpload(@RequestParam("file") MultipartFile file) {
+
+        if (file.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        List<String> csvRows = new CsvManager().getRows(file);
+        if (csvRows == null) {
+            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+
+        List<Product> products = new ProductRows(csvRows).convertRowsToProducts();
+        if (products == null){
+            return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
+        }
+
+        return new ResponseEntity<>(productService.saveAll(products), HttpStatus.CREATED);
+    }
+
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> postProduct(@RequestBody Product product) {
         System.out.println("Creating Product " + product.toString());
@@ -70,13 +96,6 @@ public class ProductController {
                 product.getDateOfLastChange(),
                 product.getImage()));
         return new ResponseEntity<>(product, HttpStatus.CREATED);
-    }
-
-    //Upload from File
-    @PostMapping(value = "/saveAll", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Product> saveAllProducts(@RequestBody List<Product> products) {
-        productService.saveAll(products);
-        return products;
     }
 
     @PutMapping(value = "/{id}")

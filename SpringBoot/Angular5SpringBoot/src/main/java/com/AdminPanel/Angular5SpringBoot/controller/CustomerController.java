@@ -1,6 +1,8 @@
 package com.AdminPanel.Angular5SpringBoot.controller;
 
 import com.AdminPanel.Angular5SpringBoot.dto.CustomerDto;
+import com.AdminPanel.Angular5SpringBoot.fileWorkspace.CsvManager;
+import com.AdminPanel.Angular5SpringBoot.fileWorkspace.modelConvertors.CustomerRows;
 import com.AdminPanel.Angular5SpringBoot.model.Customer;
 import com.AdminPanel.Angular5SpringBoot.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -22,13 +25,13 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    @GetMapping (produces= MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CustomerDto> getAll() {
         List<Customer> customerList = customerService.findAll();
-        if(customerList.isEmpty()){
+        if (customerList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        CustomerDto wrapper  = new CustomerDto();
+        CustomerDto wrapper = new CustomerDto();
         wrapper.setListCustomers(customerList);
         return new ResponseEntity<>(wrapper, HttpStatus.OK);
     }
@@ -44,17 +47,17 @@ public class CustomerController {
         return new ResponseEntity<>(customer, HttpStatus.OK);
     }
 
-    @GetMapping(value="/login/{userName}",  produces=MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/login/{userName}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> findByUserName(@PathVariable String userName) {
         Customer customer = customerService.findByUserName(userName);
         if (customer == null) {
             System.out.println("Unable to find. Customer with userName " + userName + " not found");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return  new ResponseEntity<>(customer, HttpStatus.OK);
+        return new ResponseEntity<>(customer, HttpStatus.OK);
     }
 
-    @PostMapping (produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> postCustomer(@RequestBody Customer customer) {
         System.out.println("Creating Customer " + customer.getUserName());
         if (customerService.isCustomerExist(customer)) {
@@ -71,10 +74,32 @@ public class CustomerController {
                 customer.getPhone(),
                 customer.getAccess(),
                 customer.getImage()));
-       return new ResponseEntity<>(customer, HttpStatus.CREATED);
+        return new ResponseEntity<>(customer, HttpStatus.CREATED);
     }
 
-    @PutMapping (value="/{id}")
+    @PostMapping(value = "/upload",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Customer>> singleFileUpload(@RequestParam("file") MultipartFile file) {
+
+        if (file.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+
+        List<String> csvRows = new CsvManager().getRows(file);
+        if (csvRows == null) {
+            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+
+        List<Customer> customers = new CustomerRows(csvRows).convertRowsToCustomers();
+        if (customers == null) {
+            return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
+        }
+
+        return new ResponseEntity<>(customerService.saveAll(customers), HttpStatus.CREATED);
+    }
+
+    @PutMapping(value = "/{id}")
     public ResponseEntity<Customer> updateCustomer(@PathVariable("id") Long id, @RequestBody Customer customer) {
         System.out.println("Update customer with id " + id);
         Customer cust = customerService.findById(id);
@@ -90,8 +115,8 @@ public class CustomerController {
         return new ResponseEntity<>(customer, HttpStatus.OK);
     }
 
-    @DeleteMapping(value="/{id}")
-    public ResponseEntity<Customer> deleteCustomer(@PathVariable("id") Long id){
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Customer> deleteCustomer(@PathVariable("id") Long id) {
         System.out.println("Fetching & Deleting Customer with id " + id);
         Customer customer = customerService.findById(id);
         if (customer == null) {

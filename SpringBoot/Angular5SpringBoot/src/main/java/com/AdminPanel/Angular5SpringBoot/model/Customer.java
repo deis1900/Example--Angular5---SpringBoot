@@ -16,41 +16,41 @@ public class Customer implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
     @Column
-    String firstName;
+    private String firstName;
 
     @Column
-    String lastName;
+    private String lastName;
 
     @Column(unique = true)
-    String userName;
+    private String userName;
 
     @Column
-    String password;
+    private String password;
 
     @Column(unique = true)
-    String email;
+    private String email;
 
     @Column
     @Enumerated(EnumType.STRING)
-    Sex gender;
+    private Sex gender;
 
     @Column(unique = true)
-    Integer phone;
+    private Long phone;
 
     @Column
-    Boolean access;
+    private Boolean access;
 
     @Column
-    String image;
+    private String image;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Invoice> invoices = new ArrayList<>();
 
     public Customer(String firstName, String lastName, String userName, String password, String email,
-                    Sex gender, Integer phone, Boolean access, String image) {
+                    Sex gender, Long phone, Boolean access, String image) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
@@ -62,7 +62,7 @@ public class Customer implements Serializable {
         this.image = image;
     }
 
-    protected Customer() {
+    public Customer() {
     }
 
     public enum Sex {
@@ -104,7 +104,6 @@ public class Customer implements Serializable {
     public String getPassword() {
         return password;
     }
-
     public void setPassword(String password) {
         this.password = password;
     }
@@ -125,11 +124,11 @@ public class Customer implements Serializable {
         this.gender = gender;
     }
 
-    public Integer getPhone() {
+    public Long getPhone() {
         return phone;
     }
 
-    public void setPhone(Integer phone) {
+    public void setPhone(Long phone) {
         this.phone = phone;
     }
 
@@ -152,7 +151,7 @@ public class Customer implements Serializable {
     @Override
     public String toString() {
         return String.format("Customer[id=%d, firstName='%s', lastName='%s', userName='%s'," +
-                        "password='%s', email='%s', sex='%s', phone=%d, access='%s', image='%s']",
+                        "password='%s', email='%s', gender='%s', phone=%d, access='%s', image='%s']",
                 id, firstName, lastName, userName, password, email, gender, phone, access, image);
     }
 
@@ -177,4 +176,7 @@ public class Customer implements Serializable {
         result = 31 * result + (phone != null ? phone.hashCode() : 0);
         return result;
     }
+
+
+
 }

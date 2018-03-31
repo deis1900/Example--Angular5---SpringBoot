@@ -11,7 +11,7 @@ public interface CustomerService {
 
     void save(Customer customer);
 
-    void saveAll(List<Customer> customerList);
+    List<Customer> saveAll(List<Customer> customerList);
 
     Customer findById(Long id);
 

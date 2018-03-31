@@ -15,15 +15,10 @@ INSERT INTO Customer (id, first_Name, last_Name, user_Name, password, email, gen
 INSERT INTO Customer (id, first_Name, last_Name, user_Name, password, email, gender, phone, access, image) VALUES (6, 'Ross', 'Doe', 'DuRos', 'okkjgfj','ross@email.com', 'Women', 9765, true, 'https://image.flaticon.com/icons/svg/672/672636.svg');
 
 INSERT INTO Invoice (id, date_Of_Purchase, amount, currency, customer_id) VALUES (1, 889898498, 989.55, 'UAH', 1);
-INSERT INTO Invoice (id, date_Of_Purchase, amount, currency, customer_id) VALUES (2, 098769898, 565.78, 'UAH', 3);
-INSERT INTO Invoice (id, date_Of_Purchase, amount, currency, customer_id) VALUES (3, 883433898, 773.58, 'UAH', 5);
+INSERT INTO Invoice (id, date_Of_Purchase, amount, currency, customer_id) VALUES (2, 098769898, 565.78, 'UAH', 1);
+INSERT INTO Invoice (id, date_Of_Purchase, amount, currency, customer_id) VALUES (3, 883433898, 773.58, 'UAH', 1);
 
+INSERT INTO Invoices_Products (invoice_id, product_id) VALUES (1, 1);
 INSERT INTO Invoices_Products (invoice_id, product_id) VALUES (1, 2);
-INSERT INTO Invoices_Products (invoice_id, product_id) VALUES (1, 3);
-INSERT INTO Invoices_Products (invoice_id, product_id) VALUES (1, 4);
-INSERT INTO Invoices_Products (invoice_id, product_id) VALUES (1, 8);
-INSERT INTO Invoices_Products (invoice_id, product_id) VALUES (2, 8);
-INSERT INTO Invoices_Products (invoice_id, product_id) VALUES (2, 3);
-INSERT INTO Invoices_Products (invoice_id, product_id) VALUES (3, 6);
-INSERT INTO Invoices_Products (invoice_id, product_id) VALUES (3, 5);
-INSERT INTO Invoices_Products (invoice_id, product_id) VALUES (3, 4);
+INSERT INTO Invoices_Products (invoice_id, product_id) VALUES (2, 1);
+INSERT INTO Invoices_Products (invoice_id, product_id) VALUES (3, 1);

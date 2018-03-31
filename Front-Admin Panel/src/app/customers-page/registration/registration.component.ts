@@ -11,7 +11,7 @@ import 'rxjs/add/operator/map';
   styleUrls: ['./registration.component.scss']
 })
 export class RegistrationComponent {
-  customer: User = new User(null, ' ', '', '', '', '', '', null, false, '');
+  customer: User = new User(null, '', '', '', '', '', '', null, false, '');
   editing = false;
   customers: User [];
   constructor(private usersService: UsersService, private activeRoute: ActivatedRoute,
@@ -53,7 +53,7 @@ export class RegistrationComponent {
               const users = data['listCustomers'];
               return users.filter(item => item.id === id)
                 ||
-                new User(null, ' ', '', '', '', '', '',
+                new User(0, ' ', '', '', '', '', '',
                   null, false, '');
             }
           )
@@ -75,7 +75,7 @@ export class RegistrationComponent {
 
   resetForm() {
     this.customer =
-      new User(null, ' ', '', '', '', '', '', 0, false, '');
+      new User(null, '', '', '', '', '', '', 0, false, '');
   }
 
 }
