@@ -29,7 +29,7 @@ export class ProductsService {
   );
   }
   postProduct(product: Product): Observable<Product> {
-    return this.http.post<Product>('/product', product, this.httpOptions)
+    return this.http.post<Product>('/product/save', product, this.httpOptions)
       .pipe(
         catchError(this.handleError)
       );

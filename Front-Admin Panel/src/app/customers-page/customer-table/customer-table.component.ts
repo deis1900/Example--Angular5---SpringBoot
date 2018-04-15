@@ -1,7 +1,7 @@
 import {Component, ViewChild} from '@angular/core';
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
-import {User} from '../user/user';
-import {UsersService} from '../user/user.service';
+import {Customer} from '../customer/customer';
+import {CustomerService} from '../customer/cusotmer.service';
 
 @Component({
   selector: 'app-customer-table',
@@ -11,13 +11,13 @@ import {UsersService} from '../user/user.service';
 export class CustomerTableComponent {
   displayedColumns;
   dataSource;
-  users: User[];
+  users: Customer[];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private userService: UsersService) {
-    this.userService.getUsers().subscribe(data => {
+  constructor(private customerService: CustomerService) {
+    this.customerService.getUsers().subscribe(data => {
         if (!data) {
           return alert('No access to the server');
         } else {
@@ -48,6 +48,6 @@ export class CustomerTableComponent {
     this.dataSource.filter = filterValue;
   }
   deleteCustomer(key): void {
-    this.userService.deleteUser(key).subscribe();
+    this.customerService.deleteUser(key).subscribe();
   }
 }

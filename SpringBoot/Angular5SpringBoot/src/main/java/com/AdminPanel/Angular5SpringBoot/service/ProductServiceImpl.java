@@ -23,13 +23,13 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public void save(Product product) {
-        productRepository.save(product);
+        productRepository.saveAndFlush(product);
     }
 
     @Override
     @Transactional
     public void updateProduct(Product product) {
-        productRepository.saveAndFlush(product);
+        productRepository.save(product);
     }
 
     @Override

@@ -29,7 +29,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Transactional
     public void save(Customer customer) {
-        customerRepository.save(customer);
+        customerRepository.saveAndFlush(customer);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Transactional
     public void updateCustomer(Customer customer) {
-        customerRepository.saveAndFlush(customer);
+        customerRepository.save(customer);
     }
 
     @Override

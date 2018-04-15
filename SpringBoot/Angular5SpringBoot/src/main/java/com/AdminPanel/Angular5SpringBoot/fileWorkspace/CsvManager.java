@@ -14,15 +14,9 @@ public class CsvManager {
 
     private List<String> rows = new ArrayList<>();
 
-    public List<String> getRows(MultipartFile file) {
-        try {
+    public List<String> getRows(MultipartFile file) throws IOException, FileException {
             String pathToFile = writeFile(file);
             return readFile(pathToFile);
-        } catch (IOException e) {
-//            log.error("File read/write error" + e.getMessage());
-            e.printStackTrace();
-            return null;
-        }
     }
 
     private List<String> readFile(String csvFile) throws IOException {
@@ -33,10 +27,13 @@ public class CsvManager {
         return null;
     }
 
-    private String writeFile(MultipartFile file) throws IOException {
+    private String writeFile(MultipartFile file) throws IOException, FileException {
         byte[] bytes = file.getBytes();
         String UPLOADED_FOLDER = "/home/denis/dev/JS Projects/forSpringMVCStore/SpringBoot/Angular5SpringBoot/src/main/tempfiles/";
         Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
+        if (Files.isWritable(path)) {
+            throw new FileException("File can't to save.", 1);
+        }
         Files.write(path, bytes);
         // log.info("Get file: " + file.getOriginalFilename();
         return UPLOADED_FOLDER + file.getOriginalFilename();

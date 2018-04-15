@@ -1,7 +1,5 @@
 package com.AdminPanel.Angular5SpringBoot.model;
 
-import org.hibernate.validator.constraints.UniqueElements;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -16,6 +14,7 @@ public class Product {
     private Long id;
 
     @Column
+    @NotNull
     private String typeOfClothes;
 
     @Column
@@ -33,8 +32,8 @@ public class Product {
     @Column
     private String image;
 
-    @ManyToMany(targetEntity = Invoice.class)
-    private List<Invoice> invoices = new ArrayList<>();
+//    @ManyToMany(targetEntity = Invoice.class)
+//    private List<Invoice> invoices = new ArrayList<>();
 
     public Product(Long id, String typeOfClothes, String material, String size, String color, Long dateOfLastChange, String image) {
         this.id = id;

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {User} from './user/user';
-import {UsersService} from './user/user.service';
+import {Customer} from './customer/customer';
+import {CustomerService} from './customer/cusotmer.service';
+
 
 @Component({
   selector: 'app-customer-page',
@@ -9,13 +10,13 @@ import {UsersService} from './user/user.service';
 })
 export class CustomerPageComponent implements OnInit {
 
-  customers: User[] = [];
+  customers: Customer[] = [];
   isMarked = false;
   searchUserName = '';
-  constructor(private userService: UsersService) { }
+  constructor(private customerService: CustomerService) { }
 
   ngOnInit() {
-    this.userService.getUsers().subscribe(list => {
+    this.customerService.getUsers().subscribe(list => {
       this.customers = list;
     });
   }

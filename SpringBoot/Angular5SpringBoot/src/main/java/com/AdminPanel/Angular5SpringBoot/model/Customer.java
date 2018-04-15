@@ -1,9 +1,14 @@
 package com.AdminPanel.Angular5SpringBoot.model;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "Customer",
@@ -19,18 +24,25 @@ public class Customer implements Serializable {
     private Long id;
 
     @Column
+    @NotEmpty(message = "*Please provide your first name")
     private String firstName;
 
     @Column
+    @NotEmpty(message = "*Please provide your last name")
     private String lastName;
 
     @Column(unique = true)
+    @NotEmpty(message = "*Please provide your login")
     private String userName;
 
     @Column
+    @Length(min = 5, message = "*Your password must have at least 5 characters")
+    @Transient
+    @NotEmpty(message = "*Please provide your password")
     private String password;
 
     @Column(unique = true)
+    @Email
     private String email;
 
     @Column
@@ -38,6 +50,7 @@ public class Customer implements Serializable {
     private Sex gender;
 
     @Column(unique = true)
+    @NotEmpty(message = "*Please provide your phone")
     private Long phone;
 
     @Column
@@ -45,6 +58,10 @@ public class Customer implements Serializable {
 
     @Column
     private String image;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Invoice> invoices = new ArrayList<>();
@@ -148,6 +165,14 @@ public class Customer implements Serializable {
         this.image = image;
     }
 
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
     @Override
     public String toString() {
         return String.format("Customer[id=%d, firstName='%s', lastName='%s', userName='%s'," +
@@ -155,27 +180,6 @@ public class Customer implements Serializable {
                 id, firstName, lastName, userName, password, email, gender, phone, access, image);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Customer customer = (Customer) o;
-
-        if (id != null ? !id.equals(customer.id) : customer.id != null) return false;
-        if (userName != null ? !userName.equals(customer.userName) : customer.userName != null) return false;
-        if (email != null ? !email.equals(customer.email) : customer.email != null) return false;
-        return phone != null ? phone.equals(customer.phone) : customer.phone == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (userName != null ? userName.hashCode() : 0);
-        result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (phone != null ? phone.hashCode() : 0);
-        return result;
-    }
 
 
 

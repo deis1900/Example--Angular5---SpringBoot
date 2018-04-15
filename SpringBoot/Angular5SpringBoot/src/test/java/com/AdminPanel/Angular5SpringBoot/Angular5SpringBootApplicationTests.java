@@ -11,6 +11,7 @@ public class Angular5SpringBootApplicationTests {
 
 	@Test
 	public void contextLoads() {
+
 	}
 
 }
