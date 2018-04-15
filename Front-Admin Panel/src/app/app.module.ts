@@ -1,4 +1,3 @@
-///<reference path="customers-page/customer/customer.component.ts"/>
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -45,7 +44,6 @@ import {InvoiceService} from './invoices-page/invoice/invoice.service';
 import {FileUploaderComponent} from './file-uploader/file-uploader.component';
 import {FileUploaderService} from './file-uploader/file-uploader.service';
 import {CustomerService} from './customers-page/customer/cusotmer.service';
-import { LoginPageComponent } from './user/login-page/login-page.component';
 
 const appRoutes: Routes = [
   {
@@ -103,7 +101,6 @@ const appRoutes: Routes = [
     SearchInvoicePipe,
     CreateInvoiceComponent,
     FileUploaderComponent,
-    LoginPageComponent,
   ],
   imports: [
     BrowserModule,
