@@ -69,6 +69,7 @@ export class CreateInvoiceComponent implements OnInit {
   submitForm(form: NgForm) {
     if (form.valid) {
       this.invoiceService.postInvoice(this.invoice);
+      this.resetForm();
       this.router.navigateByUrl('/invoice/table');
     }
   }

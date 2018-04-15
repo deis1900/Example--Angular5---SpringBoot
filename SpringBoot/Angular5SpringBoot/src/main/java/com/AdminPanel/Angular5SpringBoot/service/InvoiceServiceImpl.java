@@ -41,7 +41,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     @Transactional
     public void save(Invoice invoice) {
-        this.invoiceRepository.save(invoice);
+        this.invoiceRepository.saveAndFlush(invoice);
     }
 
     @Override
@@ -53,6 +53,6 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     @Transactional
     public void update(Invoice invoice) {
-        this.invoiceRepository.saveAndFlush(invoice);
+        this.invoiceRepository.save(invoice);
     }
 }

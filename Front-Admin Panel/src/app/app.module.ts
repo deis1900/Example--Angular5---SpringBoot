@@ -1,3 +1,4 @@
+///<reference path="customers-page/customer/customer.component.ts"/>
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -15,14 +16,14 @@ import {
   MatSortModule,
   MatStepperIntl,
   MatStepperModule,
-  MatTableModule,
+  MatTableModule
 } from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import 'hammerjs';
 
 import {AppComponent} from './app.component';
 import {CustomerPageComponent} from './customers-page/customer-page.component';
-import {UserComponent} from './customers-page/user/user.component';
+import {CustomerComponent} from './customers-page/customer/customer.component';
 import {RegistrationComponent} from './customers-page/registration/registration.component';
 import {HoverDirective} from './hover.directive';
 import {ProductComponent} from './products-page/product/product.component';
@@ -36,40 +37,47 @@ import {SearchTypePipe} from './products-page/searchType.pipe';
 import {SidenavDrawerOverviewMainComponent} from './sidenav-drawer-overview-main/sidenav-drawer-overview-main.component';
 import {AddProductComponent} from './products-page/add-product/add-product.component';
 import {CustomerTableComponent} from './customers-page/customer-table/customer-table.component';
-import {UsersService} from './customers-page/user/user.service';
 import {SearchCustomerPipe} from './customers-page/searchCustomer.pipe';
 import {InvoiceTableComponent} from './invoices-page/invoice-table/invoice-table.component';
 import {SearchInvoicePipe} from './invoices-page/searchInvoice.pipe';
 import {CreateInvoiceComponent} from './invoices-page/create-invoice/create-invoice.component';
 import {InvoiceService} from './invoices-page/invoice/invoice.service';
-import { FileUploaderComponent } from './file-uploader/file-uploader.component';
+import {FileUploaderComponent} from './file-uploader/file-uploader.component';
+import {FileUploaderService} from './file-uploader/file-uploader.service';
+import {CustomerService} from './customers-page/customer/cusotmer.service';
+import { LoginPageComponent } from './user/login-page/login-page.component';
 
 const appRoutes: Routes = [
   {
     path: '', component: HomePageComponent
   },
   {
-    path: 'product', component: ProductsPageComponent},
+    path: 'product', component: ProductsPageComponent
+  },
   {path: 'product/table/:mode/:id', component: AddProductComponent},
   {path: 'product/table/:mode', component: AddProductComponent},
   {path: 'product/table', component: ProductTableComponent},
-  {path: 'product/:id', component: ProductComponent
-  },
+  {path: 'product/:id', component: ProductComponent},
   {
-    path: 'customer', component: CustomerPageComponent},
+    path: 'customer', component: CustomerPageComponent
+  },
   {path: 'customer/table/:mode/:id', component: RegistrationComponent},
   {path: 'customer/table/:mode', component: RegistrationComponent},
   {path: 'customer/table', component: CustomerTableComponent},
-  {path: 'customer/:email', component: UserComponent},
+  {path: 'customer/:email', component: CustomerComponent},
   {
-    path: 'invoice', component: InvoicesPageComponent},
+    path: 'invoice', component: InvoicesPageComponent
+  },
   {path: 'invoice/table/:mode/:id', component: CreateInvoiceComponent},
   {path: 'invoice/table/:mode', component: CreateInvoiceComponent},
   {path: 'invoice/table', component: InvoiceTableComponent},
   {path: 'invoice/:id', component: InvoiceComponent},
   {
-    path: '**/*', redirectTo: '/'
+    path: 'file/upload', component: FileUploaderComponent
   },
+  {
+    path: '**/*', redirectTo: '/'
+  }
 ];
 
 
@@ -80,7 +88,7 @@ const appRoutes: Routes = [
     CustomerPageComponent,
     CustomerTableComponent,
     RegistrationComponent,
-    UserComponent,
+    CustomerComponent,
     ProductsPageComponent,
     ProductTableComponent,
     ProductComponent,
@@ -95,6 +103,7 @@ const appRoutes: Routes = [
     SearchInvoicePipe,
     CreateInvoiceComponent,
     FileUploaderComponent,
+    LoginPageComponent,
   ],
   imports: [
     BrowserModule,
@@ -115,7 +124,8 @@ const appRoutes: Routes = [
     MatCheckboxModule,
     ReactiveFormsModule,
   ],
-  providers: [ InvoiceService, ProductsService, UsersService, {provide: MatStepperIntl, useClass: CreateInvoiceComponent}],
+  providers: [InvoiceService, ProductsService, CustomerService, FileUploaderService,
+    {provide: MatStepperIntl, useClass: CreateInvoiceComponent}],
   bootstrap: [AppComponent]
 })
 export class AppModule {

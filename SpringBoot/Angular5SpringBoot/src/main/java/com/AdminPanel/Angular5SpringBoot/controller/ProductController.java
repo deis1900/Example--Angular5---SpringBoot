@@ -2,6 +2,7 @@ package com.AdminPanel.Angular5SpringBoot.controller;
 
 import com.AdminPanel.Angular5SpringBoot.dto.ProductDto;
 import com.AdminPanel.Angular5SpringBoot.fileWorkspace.CsvManager;
+import com.AdminPanel.Angular5SpringBoot.fileWorkspace.FileException;
 import com.AdminPanel.Angular5SpringBoot.fileWorkspace.modelConvertors.ProductRows;
 import com.AdminPanel.Angular5SpringBoot.model.Product;
 import com.AdminPanel.Angular5SpringBoot.service.ProductService;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -62,25 +64,32 @@ public class ProductController {
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List <Product>>  singleFileUpload(@RequestParam("file") MultipartFile file) {
+        String fileType = file.getContentType();
 
-        if (file.isEmpty()) {
+        if (file.isEmpty() || fileType == null || fileType.equals(".csv")) {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
 
-        List<String> csvRows = new CsvManager().getRows(file);
-        if (csvRows == null) {
-            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+        List<String> csvRows;
+        try {
+            csvRows = new CsvManager().getRows(file);
+            if (csvRows == null) {
+                return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+            }
+        } catch (FileException e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        } catch (IOException ioE) {
+            return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
         }
 
         List<Product> products = new ProductRows(csvRows).convertRowsToProducts();
         if (products == null){
             return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
         }
-
         return new ResponseEntity<>(productService.saveAll(products), HttpStatus.CREATED);
     }
 
-    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/save", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> postProduct(@RequestBody Product product) {
         System.out.println("Creating Product " + product.toString());
         if (product.equals(productService.getOne(product.getId()))) {

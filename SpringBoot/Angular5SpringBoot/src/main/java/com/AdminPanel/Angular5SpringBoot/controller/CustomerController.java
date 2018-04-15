@@ -2,9 +2,13 @@ package com.AdminPanel.Angular5SpringBoot.controller;
 
 import com.AdminPanel.Angular5SpringBoot.dto.CustomerDto;
 import com.AdminPanel.Angular5SpringBoot.fileWorkspace.CsvManager;
+import com.AdminPanel.Angular5SpringBoot.fileWorkspace.FileException;
 import com.AdminPanel.Angular5SpringBoot.fileWorkspace.modelConvertors.CustomerRows;
 import com.AdminPanel.Angular5SpringBoot.model.Customer;
 import com.AdminPanel.Angular5SpringBoot.service.CustomerService;
+import com.AdminPanel.Angular5SpringBoot.util.CustomErrorType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -12,12 +16,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
 @RequestMapping("/customer")
 public class CustomerController {
 
+    private static final Logger logger = LoggerFactory.getLogger(CustomerController.class.getName());
     private CustomerService customerService;
 
     @Autowired
@@ -41,7 +47,7 @@ public class CustomerController {
         System.out.println("Fetching Customer with id " + id);
         Customer customer = customerService.findById(id);
         if (customer == null) {
-            System.out.println("Customer with id " + id + " not found");
+           logger.error("Customer with id " + id + " not found");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(customer, HttpStatus.OK);
@@ -51,7 +57,7 @@ public class CustomerController {
     public ResponseEntity<?> findByUserName(@PathVariable String userName) {
         Customer customer = customerService.findByUserName(userName);
         if (customer == null) {
-            System.out.println("Unable to find. Customer with userName " + userName + " not found");
+            logger.error("Unable to find. Customer with userName " + userName + " not found.");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(customer, HttpStatus.OK);
@@ -61,8 +67,10 @@ public class CustomerController {
     public ResponseEntity<?> postCustomer(@RequestBody Customer customer) {
         System.out.println("Creating Customer " + customer.getUserName());
         if (customerService.isCustomerExist(customer)) {
-            System.out.println("A Customer with name " + customer.getUserName() + " already exist");
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            logger.error("username Already exist " + customer.getUserName());
+            return new ResponseEntity<>(
+                    new CustomErrorType("user with username " + customer.getUserName() + "already exist "),
+                    HttpStatus.CONFLICT);
         }
         customerService.save(new Customer(
                 customer.getFirstName(),
@@ -86,7 +94,14 @@ public class CustomerController {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
-        List<String> csvRows = new CsvManager().getRows(file);
+        List<String> csvRows;
+        try {
+            csvRows = new CsvManager().getRows(file);
+        } catch (FileException e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        } catch (IOException ioE) {
+            return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        }
         if (csvRows == null) {
             return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
         }
@@ -104,7 +119,7 @@ public class CustomerController {
         System.out.println("Update customer with id " + id);
         Customer cust = customerService.findById(id);
         if (cust == null) {
-            System.out.println("User with id " + id + " not found");
+            logger.error("Unable to update. Customer with id " + id + " not found");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         if (customer.equals(customerService.findById(customer.getId()))) {
@@ -117,10 +132,10 @@ public class CustomerController {
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Customer> deleteCustomer(@PathVariable("id") Long id) {
-        System.out.println("Fetching & Deleting Customer with id " + id);
+       logger.info("Fetching & Deleting Customer with id " + id);
         Customer customer = customerService.findById(id);
         if (customer == null) {
-            System.out.println("Unable to delete. Customer with id " + id + " not found");
+            logger.error("Unable to delete. Customer with id " + id + " not found");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         customerService.deleteCustomer(id);
