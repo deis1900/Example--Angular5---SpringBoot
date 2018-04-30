@@ -1,46 +1,20 @@
 
-<form [formGroup]="formGroup" novalidate (ngSubmit)="onSubmit()">
-  <input type="file" (change)="onFileChange($event)" />
-  <button type="submit" [disabled]="formGroup.invalid || formGroup.prestine">Submit</button>
-</form>
-
-<div class="form-group">
+<!--<form [formGroup]="formGroup" novalidate (ngSubmit)="onSubmit()">-->
+  <!--<input type="file" (change)="onFileChange($event)" />-->
+  <!--<button type="submit" [disabled]="formGroup.invalid || formGroup.prestine">Submit</button>-->
+<!--</form>-->
+<div class="hidden" >
+  <p>You may upload file.csv</p>
+  <p>The file size can't be more then 11Mb</p>
+</div>
+<div class="form-group" id="upload-file">
   <label for="file">Choose File</label>
   <input type="file"
          id="file"
          (change)="handleFileInput($event.target.files)">
 </div>
 <div class="mat-button-toggle">
-<button (click)="uploadFileProductsToActivity()">File upload Products</button>
-  <button (click)="uploadFileCustomersToActivity()">File upload Customers</button>
+<button class="btn btn-primary " (click)="uploadFileProductsToActivity()">File upload Products</button>
+  <button class="btn btn-primary" (click)="uploadFileCustomersToActivity()">File upload Customers</button>
 </div>
 
-<form [formGroup]="myForm" novalidate (ngSubmit)="submit()">
-  <div class="form-group">
-    <label>Имя</label>
-    <input class="form-control" name="name" formControlName="userName" />
-
-    <div class="alert alert-danger"
-         *ngIf="myForm.controls['userName'].invalid && myForm.controls['userName'].touched">
-      Не указано имя
-    </div>
-  </div>
-  <div class="form-group">
-    <label>Email</label>
-    <input class="form-control" name="email" formControlName="userEmail" />
-
-    <div class="alert alert-danger"
-         *ngIf="myForm.controls['userEmail'].invalid && myForm.controls['userEmail'].touched">
-      Некорректный email
-    </div>
-  </div>
-  <div class="form-group">
-    <label>Телефон</label>
-    <input class="form-control" name="phone" formControlName="userPhone" />
-  </div>
-  <div class="form-group">
-    <button class="btn btn-default" [disabled]="myForm.invalid">
-      Отправить
-    </button>
-  </div>
-</form>

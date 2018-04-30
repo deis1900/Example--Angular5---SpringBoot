@@ -1,17 +1,11 @@
 import { Injectable } from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {ErrorObservable} from 'rxjs/observable/ErrorObservable';
-import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
-import {catchError, map, retry} from 'rxjs/operators';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {catchError, map} from 'rxjs/operators';
 
 @Injectable()
 export class FileUploaderService {
-  httpOptions = {
-    headers: new HttpHeaders({
-  // 'Content-Type':  'multipart/form-data',
-      // 'Authorization': 'my-auth-token'
-    })
-  };
 
   constructor(private http: HttpClient) {
   }
@@ -19,26 +13,24 @@ export class FileUploaderService {
   postCustomersFile(fileToUpload: File): Observable<boolean> {
     const endpoint = 'customer/upload';
     const formData: FormData = new FormData();
-    formData.append('fileKey', fileToUpload, fileToUpload.name);
-    return this.http.post(endpoint, formData, this.httpOptions)
+    formData.append('UploadFile', fileToUpload, fileToUpload.name);
+    return this.http.post(endpoint, formData)
       .pipe(
         map(() => {
           return true;
         } ),
-        retry(3),
         catchError(this.handleError)
       );
   }
   postProductsFile(fileToUpload: File): Observable<boolean> {
     const endpoint = 'product/upload';
     const formData: FormData = new FormData();
-    formData.append('fileKey', fileToUpload, fileToUpload.name);
-    return this.http.post(endpoint, formData, this.httpOptions)
+    formData.append('UploadFile', fileToUpload, fileToUpload.name);
+    return this.http.post(endpoint, formData)
       .pipe(
         map(() => {
           return true;
         } ),
-        retry(3),
         catchError(this.handleError)
       );
   }
