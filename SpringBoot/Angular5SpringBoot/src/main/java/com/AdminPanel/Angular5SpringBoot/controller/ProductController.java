@@ -63,10 +63,12 @@ public class ProductController {
     @PostMapping(value = "/upload",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List <Product>>  singleFileUpload(@RequestParam("file") MultipartFile file) {
-        String fileType = file.getContentType();
+    public ResponseEntity<List <Product>>  singleFileUpload(@RequestParam("UploadFile") MultipartFile file) {
+        System.out.println("File with name " + file.getOriginalFilename() + " uploaded");
 
-        if (file.isEmpty() || fileType == null || fileType.equals(".csv")) {
+        if (file.getOriginalFilename() == null
+                || !file.getOriginalFilename().endsWith(".csv")
+                || !file.getName().equals("UploadFile")) {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
 
@@ -77,6 +79,7 @@ public class ProductController {
                 return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
             }
         } catch (FileException e) {
+            System.out.println("Error number " + e.getNum() + " from FileException.class"); // logger
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         } catch (IOException ioE) {
             return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);

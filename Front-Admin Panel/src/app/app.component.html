@@ -2,6 +2,7 @@
   <div class="nav-wrapper">
     <a href="" class="brand-logo">Main Page</a>
     <ul id="nav-mobile" class="right hide-on-med-and-down">
+      <li><a routerLink="/login">SingIn</a></li>
       <li><a routerLink="/product">Products</a></li>
       <li><a routerLink="/customer">Customers</a></li>
       <li><a routerLink="/invoice">Invoices</a></li>
@@ -17,7 +18,9 @@
  	 background: #fc0;">Administrator panel for mini store</h1>
 </div>
 
-<app-home-page></app-home-page>
+<div class="main-container">
+  <app-home-page></app-home-page>
+</div>
 
 <footer class="page-footer">
   <div class="container">

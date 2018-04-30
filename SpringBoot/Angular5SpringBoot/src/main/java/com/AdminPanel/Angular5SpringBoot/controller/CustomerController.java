@@ -31,7 +31,7 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/sAll/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CustomerDto> getAll() {
         List<Customer> customerList = customerService.findAll();
         if (customerList.isEmpty()) {
@@ -47,13 +47,13 @@ public class CustomerController {
         System.out.println("Fetching Customer with id " + id);
         Customer customer = customerService.findById(id);
         if (customer == null) {
-           logger.error("Customer with id " + id + " not found");
+            logger.error("Customer with id " + id + " not found");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(customer, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/login/{userName}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/with/{userName}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> findByUserName(@PathVariable String userName) {
         Customer customer = customerService.findByUserName(userName);
         if (customer == null) {
@@ -63,7 +63,7 @@ public class CustomerController {
         return new ResponseEntity<>(customer, HttpStatus.OK);
     }
 
-    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/save", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> postCustomer(@RequestBody Customer customer) {
         System.out.println("Creating Customer " + customer.getUserName());
         if (customerService.isCustomerExist(customer)) {
@@ -76,7 +76,6 @@ public class CustomerController {
                 customer.getFirstName(),
                 customer.getLastName(),
                 customer.getUserName(),
-                customer.getPassword(),
                 customer.getEmail(),
                 customer.getGender(),
                 customer.getPhone(),
@@ -88,16 +87,20 @@ public class CustomerController {
     @PostMapping(value = "/upload",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Customer>> singleFileUpload(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<List<Customer>> singleFileUpload(@RequestParam("UploadFile") MultipartFile file) {
+        System.out.println("File with name " + file.getOriginalFilename() + " uploaded");
 
-        if (file.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        if (file.getOriginalFilename() == null
+                || !file.getOriginalFilename().endsWith(".csv")
+                || !file.getName().equals("UploadFile")) {
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
 
         List<String> csvRows;
         try {
             csvRows = new CsvManager().getRows(file);
         } catch (FileException e) {
+            System.out.println("Error number " + e.getNum() + " from FileException.class"); // logger
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         } catch (IOException ioE) {
             return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
@@ -132,7 +135,7 @@ public class CustomerController {
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Customer> deleteCustomer(@PathVariable("id") Long id) {
-       logger.info("Fetching & Deleting Customer with id " + id);
+        logger.info("Fetching & Deleting Customer with id " + id);
         Customer customer = customerService.findById(id);
         if (customer == null) {
             logger.error("Unable to delete. Customer with id " + id + " not found");

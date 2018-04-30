@@ -22,4 +22,6 @@ public interface CustomerService {
     Customer findByUserName(String userName);
 
     void deleteCustomer(Long id);
+
+    Boolean determineUserAccess (String username);
 }

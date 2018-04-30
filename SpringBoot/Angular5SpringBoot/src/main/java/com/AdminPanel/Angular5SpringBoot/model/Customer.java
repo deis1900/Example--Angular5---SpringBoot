@@ -1,21 +1,19 @@
 package com.AdminPanel.Angular5SpringBoot.model;
 
-import org.hibernate.validator.constraints.Length;
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "Customer",
         indexes = {
-        @Index(name = "customer_email", columnList = "email"),
-        @Index(name = "customer_login", columnList = "userName"),
-        @Index(name = "customer_phone", columnList = "phone") })
+                @Index(name = "customer_email", columnList = "email"),
+                @Index(name = "customer_login", columnList = "userName"),
+                @Index(name = "customer_phone", columnList = "phone")})
 public class Customer implements Serializable {
 
 
@@ -35,12 +33,6 @@ public class Customer implements Serializable {
     @NotEmpty(message = "*Please provide your login")
     private String userName;
 
-    @Column
-    @Length(min = 5, message = "*Your password must have at least 5 characters")
-    @Transient
-    @NotEmpty(message = "*Please provide your password")
-    private String password;
-
     @Column(unique = true)
     @Email
     private String email;
@@ -50,7 +42,7 @@ public class Customer implements Serializable {
     private Sex gender;
 
     @Column(unique = true)
-    @NotEmpty(message = "*Please provide your phone")
+    @NotNull(message = "*Please provide your phone")
     private Long phone;
 
     @Column
@@ -59,19 +51,14 @@ public class Customer implements Serializable {
     @Column
     private String image;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
-
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<Invoice> invoices = new ArrayList<>();
+    private List<Invoice> invoices;
 
-    public Customer(String firstName, String lastName, String userName, String password, String email,
+    public Customer(String firstName, String lastName, String userName, String email,
                     Sex gender, Long phone, Boolean access, String image) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
-        this.password = password;
         this.email = email;
         this.gender = gender;
         this.phone = phone;
@@ -86,6 +73,7 @@ public class Customer implements Serializable {
         Men,
         Women
     }
+
     public Long getId() {
         return id;
     }
@@ -116,13 +104,6 @@ public class Customer implements Serializable {
 
     public void setUserName(String userName) {
         this.userName = userName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getEmail() {
@@ -165,22 +146,12 @@ public class Customer implements Serializable {
         this.image = image;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
     @Override
     public String toString() {
         return String.format("Customer[id=%d, firstName='%s', lastName='%s', userName='%s'," +
-                        "password='%s', email='%s', gender='%s', phone=%d, access='%s', image='%s']",
-                id, firstName, lastName, userName, password, email, gender, phone, access, image);
+                        " email='%s', gender='%s', phone=%d, access='%s', image='%s']",
+                id, firstName, lastName, userName, email, gender, phone, access, image);
     }
-
-
 
 
 }

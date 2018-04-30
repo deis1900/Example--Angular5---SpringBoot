@@ -11,7 +11,7 @@ import {
   MatInputModule,
   MatNativeDateModule,
   MatPaginatorModule,
-  MatSidenavModule,
+  MatSidenavModule, MatSnackBarModule,
   MatSortModule,
   MatStepperIntl,
   MatStepperModule,
@@ -44,11 +44,18 @@ import {InvoiceService} from './invoices-page/invoice/invoice.service';
 import {FileUploaderComponent} from './file-uploader/file-uploader.component';
 import {FileUploaderService} from './file-uploader/file-uploader.service';
 import {CustomerService} from './customers-page/customer/cusotmer.service';
+import {LoginPageComponent} from './user/login-page/login-page.component';
+import {RegistrationUserComponent} from './user/registration-user/registration-user.component';
+import {AuthService} from './user/auth.service';
+import {ForgetPasswordComponent} from './user/forget-password/forget-password.component';
 
 const appRoutes: Routes = [
   {
     path: '', component: HomePageComponent
   },
+  {path: 'login', component: LoginPageComponent},
+  {path: 'registration', component: RegistrationUserComponent},
+  {path: 'forgot-password', component: ForgetPasswordComponent},
   {
     path: 'product', component: ProductsPageComponent
   },
@@ -101,13 +108,16 @@ const appRoutes: Routes = [
     SearchInvoicePipe,
     CreateInvoiceComponent,
     FileUploaderComponent,
+    LoginPageComponent,
+    RegistrationUserComponent,
+    ForgetPasswordComponent,
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
-    RouterModule.forRoot(appRoutes),
+    RouterModule.forRoot(appRoutes, {onSameUrlNavigation: 'reload'}),
     MatFormFieldModule,
     MatTableModule,
     MatSortModule,
@@ -120,8 +130,9 @@ const appRoutes: Routes = [
     MatInputModule,
     MatCheckboxModule,
     ReactiveFormsModule,
+    MatSnackBarModule
   ],
-  providers: [InvoiceService, ProductsService, CustomerService, FileUploaderService,
+  providers: [InvoiceService, ProductsService, CustomerService, FileUploaderService, AuthService,
     {provide: MatStepperIntl, useClass: CreateInvoiceComponent}],
   bootstrap: [AppComponent]
 })

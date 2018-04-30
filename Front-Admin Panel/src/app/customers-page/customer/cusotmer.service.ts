@@ -14,39 +14,40 @@ export class CustomerService {
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type':  'application/json',
-      // 'Authorization': 'my-auth-token'
+      'Authorization': 'username:password'
     })
   };
 
   constructor(private http: HttpClient) {
   }
+
   getUser(userName: string): Observable<Customer> {
-    return this.http.get(`/customer/login/${userName}`, this.httpOptions)
+    return this.http.get(`/customer/with/${userName}`, this.httpOptions)
       .pipe(
         map(
           data => {
             return data;
           }
         ),
-        retry(3),
+        retry(1),
         catchError(this.handleError)
       );
   }
 
   getUsers(): Observable<Customer []> {
-    return this.http.get(`/customer`, this.httpOptions)
+    return this.http.get(`/customer/sAll`, this.httpOptions)
       .pipe(
         map(
           data => {
             return data['listCustomers'];
           }
         ),
-        retry(3),
+        retry(1),
         catchError(this.handleError)
       );
   }
   postUser(user: Customer): Observable<Customer> {
-    return this.http.post<Customer>(`/customer?body=`, user, this.httpOptions)
+    return this.http.post<Customer>(`/customer/save?body=`, user, this.httpOptions)
       .pipe(
         map( data => {
           return data;
