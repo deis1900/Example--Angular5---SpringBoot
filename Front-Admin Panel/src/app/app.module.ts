@@ -48,6 +48,9 @@ import {LoginPageComponent} from './user/login-page/login-page.component';
 import {RegistrationUserComponent} from './user/registration-user/registration-user.component';
 import {AuthService} from './user/auth.service';
 import {ForgetPasswordComponent} from './user/forget-password/forget-password.component';
+import {AuthGuard} from './guards/auth.guard';
+import {AlertComponent } from './directives/alert/alert.component';
+import {AlertService} from './directives/alert.service';
 
 const appRoutes: Routes = [
   {
@@ -64,24 +67,24 @@ const appRoutes: Routes = [
   {path: 'product/table', component: ProductTableComponent},
   {path: 'product/:id', component: ProductComponent},
   {
-    path: 'customer', component: CustomerPageComponent
+    path: 'customer', component: CustomerPageComponent, canActivate: [AuthGuard]
   },
-  {path: 'customer/table/:mode/:id', component: RegistrationComponent},
-  {path: 'customer/table/:mode', component: RegistrationComponent},
-  {path: 'customer/table', component: CustomerTableComponent},
-  {path: 'customer/:email', component: CustomerComponent},
+  {path: 'customer/table/:mode/:id', component: RegistrationComponent, canActivate: [AuthGuard]},
+  {path: 'customer/table/:mode', component: RegistrationComponent, canActivate: [AuthGuard]},
+  {path: 'customer/table', component: CustomerTableComponent, canActivate: [AuthGuard]},
+  {path: 'customer/:username', component: CustomerComponent, canActivate: [AuthGuard]},
   {
-    path: 'invoice', component: InvoicesPageComponent
+    path: 'invoice', component: InvoicesPageComponent, canActivate: [AuthGuard]
   },
-  {path: 'invoice/table/:mode/:id', component: CreateInvoiceComponent},
-  {path: 'invoice/table/:mode', component: CreateInvoiceComponent},
-  {path: 'invoice/table', component: InvoiceTableComponent},
-  {path: 'invoice/:id', component: InvoiceComponent},
+  {path: 'invoice/table/:mode/:id', component: CreateInvoiceComponent, canActivate: [AuthGuard]},
+  {path: 'invoice/table/:mode', component: CreateInvoiceComponent, canActivate: [AuthGuard]},
+  {path: 'invoice/table', component: InvoiceTableComponent, canActivate: [AuthGuard]},
+  {path: 'invoice/:id', component: InvoiceComponent, canActivate: [AuthGuard]},
   {
-    path: 'file/upload', component: FileUploaderComponent
+    path: 'file/upload', component: FileUploaderComponent, canActivate: [AuthGuard]
   },
   {
-    path: '**/*', redirectTo: '/'
+    path: '**', redirectTo: '/'
   }
 ];
 
@@ -111,6 +114,7 @@ const appRoutes: Routes = [
     LoginPageComponent,
     RegistrationUserComponent,
     ForgetPasswordComponent,
+    AlertComponent,
   ],
   imports: [
     BrowserModule,
@@ -132,7 +136,8 @@ const appRoutes: Routes = [
     ReactiveFormsModule,
     MatSnackBarModule
   ],
-  providers: [InvoiceService, ProductsService, CustomerService, FileUploaderService, AuthService,
+  providers: [InvoiceService, ProductsService, CustomerService, FileUploaderService, AuthService, AlertService,
+    [AuthGuard],
     {provide: MatStepperIntl, useClass: CreateInvoiceComponent}],
   bootstrap: [AppComponent]
 })
