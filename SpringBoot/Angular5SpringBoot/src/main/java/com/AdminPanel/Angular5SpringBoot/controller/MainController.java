@@ -1,37 +1,104 @@
 package com.AdminPanel.Angular5SpringBoot.controller;
 
-import com.AdminPanel.Angular5SpringBoot.SecurityConfiguration;
 import com.AdminPanel.Angular5SpringBoot.model.User;
+import com.AdminPanel.Angular5SpringBoot.service.EmailService;
 import com.AdminPanel.Angular5SpringBoot.service.UserService;
+import com.AdminPanel.Angular5SpringBoot.validator.UserValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.token.Token;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
-@RequestMapping(value = "/")
+@RequestMapping(value = "/auth")
 public class MainController {
 
-    private final UserService userService;
+    @Autowired
+    private UserService userService;
 
-    private final SecurityConfiguration securityConfiguration;
+    private static final Logger LOGGER = LoggerFactory.getLogger(MainController.class);
 
     @Autowired
-    public MainController(UserService userService, SecurityConfiguration securityConfiguration) {
-        this.userService = userService;
-        this.securityConfiguration = securityConfiguration;
+    private EmailService emailService;
+
+    private final UserDetailsService userDetailsService;
+
+    @Autowired
+    private UserValidator userValidator;
+
+    @Autowired
+    public MainController(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
     }
 
-    @GetMapping(value = "/login")
-    public ResponseEntity<Token> login(@RequestBody User user) {
+    @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> login(@Valid @RequestBody User user, BindingResult bindingResult) {
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        LOGGER.info(user.getUsername());
+        LOGGER.info(user.getPassword());
+
+        userValidator.validate(user, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        }
+        User userFound = userService.findByUsername(user.getUsername());
+        if (user.getPassword().equals(userFound.getPassword())) {
+
+            LOGGER.info("User " + user.getUsername() + " is logged in.");
+
+            userService.setUserToken(userFound);
+            return new ResponseEntity<>(user.getToken(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 
     @PostMapping(value = "/logout")
-    public ResponseEntity<Token> logout(){return new ResponseEntity<>(HttpStatus.OK);}
+    public ResponseEntity<String> logout(@RequestHeader String token) {
+        User user = userService.findByUsername(token.split(":")[0]);
+        user.setToken("");
+        if (true) {
+            userService.setUserToken(user);
+            LOGGER.info("User had logout.");
+            return new ResponseEntity<>("User had logout.", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("User not found.", HttpStatus.NOT_FOUND);
+    }
 
     @PostMapping(value = "/registration")
-    public ResponseEntity<Token> registerForm(){return new ResponseEntity<>(HttpStatus.OK);}
+    public ResponseEntity<String> registerForm(@RequestBody User userForm, BindingResult bindingResult) {
+
+//        userValidator.validate(userForm, bindingResult);
+//        if (bindingResult.hasErrors()) {
+////            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+//
+//        }
+        LOGGER.info(userForm.getUsername() + " : " + userForm.getPassword());
+
+        userService.save(userForm);
+        LOGGER.info("User - " + userForm.getUsername() + " - is saved.");
+
+        if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
+            LOGGER.info("User " + userForm.getUsername() + " is logged in.");
+            userService.setUserToken(userForm);
+            LOGGER.info(userForm.getToken());
+            return new ResponseEntity<>(userForm.getToken(), HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>("Not logged", HttpStatus.NOT_ACCEPTABLE);
+    }
+
+
+//    @PostMapping(value = "/auth/forgotPassword")
+//    public ResponseEntity<String> getNewPassword(@RequestBody String userEmail, @RequestHeader String ) {
+//        if (userEmail.equals(userService.findByEmail())) {
+//            return new ResponseEntity<>("Send message", HttpStatus.OK);
+//        }
+//    }
 }

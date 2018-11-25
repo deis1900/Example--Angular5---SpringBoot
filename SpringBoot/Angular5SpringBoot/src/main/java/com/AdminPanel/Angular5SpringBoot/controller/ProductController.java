@@ -27,7 +27,7 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/sAll", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ProductDto> getAll() {
         List<Product> productList = productService.findAll();
         if(productList.isEmpty()){

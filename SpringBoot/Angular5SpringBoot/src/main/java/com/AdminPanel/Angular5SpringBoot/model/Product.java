@@ -1,5 +1,7 @@
 package com.AdminPanel.Angular5SpringBoot.model;
 
+import org.springframework.data.annotation.CreatedDate;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 

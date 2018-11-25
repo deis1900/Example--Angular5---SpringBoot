@@ -31,7 +31,7 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    @GetMapping(value = "/sAll/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/sAll", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CustomerDto> getAll() {
         List<Customer> customerList = customerService.findAll();
         if (customerList.isEmpty()) {

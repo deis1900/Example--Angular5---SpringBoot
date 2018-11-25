@@ -22,11 +22,11 @@ public class Customer implements Serializable {
     private Long id;
 
     @Column
-    @NotEmpty(message = "*Please provide your first name")
+    @NotEmpty(message = "*Please provide your first role")
     private String firstName;
 
     @Column
-    @NotEmpty(message = "*Please provide your last name")
+    @NotEmpty(message = "*Please provide your last role")
     private String lastName;
 
     @Column(unique = true)
@@ -34,7 +34,8 @@ public class Customer implements Serializable {
     private String userName;
 
     @Column(unique = true)
-    @Email
+    @Email(message = "Please provide a valid e-mail")
+    @NotEmpty(message = "Please provide an e-mail")
     private String email;
 
     @Column
