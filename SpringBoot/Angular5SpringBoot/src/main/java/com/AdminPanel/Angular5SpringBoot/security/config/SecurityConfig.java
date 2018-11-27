@@ -86,9 +86,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic().disable()
                 .formLogin().disable()
                 .csrf().disable();
-
-
-        http.headers().frameOptions().disable();
     }
 
     @Bean

@@ -10,10 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.DispatcherServlet;
 
 import javax.validation.Valid;
 
@@ -46,15 +48,32 @@ public class MainController {
         LOGGER.info(user.getPassword());
 
         userValidator.validate(user, bindingResult);
-        if (bindingResult.hasErrors()) {
+        if (!bindingResult.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
-        User userFound = userService.findByUsername(user.getUsername());
-        if (user.getPassword().equals(userFound.getPassword())) {
+        User userFromDB = userService.findByUsername(user.getUsername());
+        if (user.getPassword().equals(userFromDB.getPassword())) {
 
             LOGGER.info("User " + user.getUsername() + " is logged in.");
+            LOGGER.info("Password user is " + user.getPassword());
+            LOGGER.info("User has role as " + userFromDB.getAuthorities());
 
-            userService.setUserToken(userFound);
+            userService.setUserToken(userFromDB);
+            UsernamePasswordAuthenticationToken authentication =
+                    new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), user.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+
+/*
+Change from anonymous & anonymous to user & password в DispatcherServlet
+
+
+
+anonymous should limited access to fields
+
+
+
+*/
             return new ResponseEntity<>(user.getToken(), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
