@@ -15,37 +15,32 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.DispatcherServlet;
-
 import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/auth")
 public class MainController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MainController.class);
 
-    @Autowired
-    private EmailService emailService;
+    private final EmailService emailService;
 
     private final UserDetailsService userDetailsService;
 
-    @Autowired
-    private UserValidator userValidator;
+    private final UserValidator userValidator;
 
     @Autowired
-    public MainController(UserDetailsService userDetailsService) {
+    public MainController(UserDetailsService userDetailsService, EmailService emailService, UserService userService, UserValidator userValidator) {
         this.userDetailsService = userDetailsService;
+        this.emailService = emailService;
+        this.userService = userService;
+        this.userValidator = userValidator;
     }
 
     @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> login(@Valid @RequestBody User user, BindingResult bindingResult) {
-
-        LOGGER.info(user.getUsername());
-        LOGGER.info(user.getPassword());
+    public ResponseEntity<User> login(@Valid @RequestBody User user, BindingResult bindingResult) {
 
         userValidator.validate(user, bindingResult);
         if (!bindingResult.hasErrors()) {
@@ -53,38 +48,27 @@ public class MainController {
         }
         User userFromDB = userService.findByUsername(user.getUsername());
         if (user.getPassword().equals(userFromDB.getPassword())) {
-
             LOGGER.info("User " + user.getUsername() + " is logged in.");
             LOGGER.info("Password user is " + user.getPassword());
             LOGGER.info("User has role as " + userFromDB.getAuthorities());
-
             userService.setUserToken(userFromDB);
+
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), user.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-
-/*
-Change from anonymous & anonymous to user & password в DispatcherServlet
-
-
-
-anonymous should limited access to fields
-
-
-
-*/
-            return new ResponseEntity<>(user.getToken(), HttpStatus.OK);
+            return new ResponseEntity<>(userFromDB, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 
     @PostMapping(value = "/logout")
-    public ResponseEntity<String> logout(@RequestHeader String token) {
-        User user = userService.findByUsername(token.split(":")[0]);
-        user.setToken("");
-        if (true) {
-            userService.setUserToken(user);
+    public ResponseEntity<String> logout() {
+        User user = userService.findByUsername("anonymous");
+        if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
+            UsernamePasswordAuthenticationToken authentication =
+                    new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), user.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
             LOGGER.info("User had logout.");
             return new ResponseEntity<>("User had logout.", HttpStatus.OK);
         }
@@ -94,11 +78,10 @@ anonymous should limited access to fields
     @PostMapping(value = "/registration")
     public ResponseEntity<String> registerForm(@RequestBody User userForm, BindingResult bindingResult) {
 
-//        userValidator.validate(userForm, bindingResult);
-//        if (bindingResult.hasErrors()) {
-////            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-//
-//        }
+        userValidator.validate(userForm, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        }
         LOGGER.info(userForm.getUsername() + " : " + userForm.getPassword());
 
         userService.save(userForm);
